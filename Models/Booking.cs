@@ -19,3 +19,4 @@ namespace Codeline_HealthCareCenter_OOP.Models // Codeline_HealthCareCenter_OOP.
         public DateTime AppointmentDate { get; set; }   // Date of the appointment
         public TimeSpan AppointmentTime { get; set; }   // Time of the appointment
     }
+}
