@@ -1,0 +1,51 @@
+﻿# Build and debug folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# Temporary files
+*.tmp
+*.log
+*.cache
+*.bak
+
+# Backup files
+*~ 
+*.old
+
+# NuGet packages
+*.nupkg
+project.lock.json
+project.nuget.cache
+*.snupkg
+
+# Auto-generated files
+GeneratedMSBuildEditorConfig.editorconfig
+
+# Dotnet CLI
+.vs/
+*.dbmdl
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Test results
+TestResults/
+*.trx
+
+# OS files
+.DS_Store
+Thumbs.db
