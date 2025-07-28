@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace Codeline_HealthCareCenter_OOP.Models
 {
-    class BranchDepartment
+    public class BranchDepartment
     {
+        public int BranchDepartmentId { get; set; }
+
+        // Foreign Keys
+        public int BranchId { get; set; }
+        public int DepartmentId { get; set; }
+
+        // Navigation Properties
+        public Branch Branch { get; set; }
+        public Department Department { get; set; }
     }
+
 }

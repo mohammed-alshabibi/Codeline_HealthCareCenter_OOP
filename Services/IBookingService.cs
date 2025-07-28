@@ -1,7 +1,7 @@
-﻿using HospitalSystemTeamTask.DTO_s;
-using HospitalSystemTeamTask.Models;
+﻿using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Models;
 
-namespace HospitalSystemTeamTask.Services
+namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IBookingService
     {

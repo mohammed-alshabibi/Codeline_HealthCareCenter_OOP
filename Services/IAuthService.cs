@@ -1,7 +1,7 @@
-﻿using HospitalSystemTeamTask.Models;
-using HospitalSystemTeamTask.Shared.Helper;
+﻿using Codeline_HealthCareCenter_OOP.Models;
+using Codeline_HealthCareCenter_OOP.Shared.Helper;
 
-namespace HospitalSystemTeamTask.Services
+namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IAuthService
     {
