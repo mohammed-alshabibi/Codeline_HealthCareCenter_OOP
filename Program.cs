@@ -6,16 +6,16 @@ using HospitalSystem.Services;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        StartSystem();
+        await StartSystem();
     }
-
-    static void StartSystem()
+    static async Task StartSystem()
     {
         IUserService userService = new UserService();
         IDoctorService doctorService = new DoctorService();
         IPatientService patientService = new PatientService();
+        IAuthService authService = new AuthService();
 
         bool exit = false;
 
@@ -32,15 +32,15 @@ class Program
             switch (choice)
             {
                 case "1":
-                    SuperAdminLogin(userService, doctorService, patientService);
+                    SuperAdminLogin(userService, doctorService, patientService, authService);
                     break;
 
                 case "2":
-                    AdminLogin(userService, patientService);
+                    AdminLogin(userService, patientService, authService);
                     break;
 
                 case "3":
-                    PatientLogin(userService);
+                    PatientLogin(userService, authService);
                     break;
 
                 case "0":
@@ -176,7 +176,8 @@ class Program
         }
     }
 
-    static void SuperAdminLogin(IUserService userService, IDoctorService doctorService, IPatientService patientService)
+    static async Task SuperAdminLogin(IUserService userService, IDoctorService doctorService, IPatientService patientService, IAuthService authService)
+
     {
         Console.WriteLine("=== SuperAdmin Login ===");
         string email = Ask("Email");
@@ -192,10 +193,14 @@ class Program
         {
             Console.WriteLine("Invalid SuperAdmin credentials.");
         }
+        await authService.SaveTokenToCookie(user.UserID.ToString());
+        ShowSuperAdminMenu(userService, doctorService, patientService);
+
     }
 
 
-    static void AdminLogin(IUserService userService, IPatientService patientService)
+    static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
+
     {
         Console.WriteLine("=== Admin Login ===");
 
@@ -213,9 +218,12 @@ class Program
         {
             Console.WriteLine("Invalid Admin credentials.");
         }
+        await authService.SaveTokenToCookie(admin.UserID.ToString());
+        ShowAdminMenu(userService, patientService);
+
     }
 
-    static void PatientLogin(IUserService userService)
+    static async Task PatientLogin(IUserService userService, IAuthService authService)
     {
         Console.WriteLine("=== Patient Login ===");
 
@@ -231,8 +239,11 @@ class Program
         }
         else
         {
-            Console.WriteLine("❌ Invalid Patient credentials.");
+            Console.WriteLine(" Invalid Patient credentials.");
         }
+        await authService.SaveTokenToCookie(patient.UserID.ToString());
+        ShowPatientMenu(patient);
+
     }
 
 
