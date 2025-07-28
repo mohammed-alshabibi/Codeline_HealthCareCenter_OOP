@@ -6,8 +6,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IClinicService
     {
-        void AddClinic(ClinicInputDTO input);
-        void UpdateClinic(int clinicId, ClinicInputDTO input);
+        void AddClinic(ClinicInputDTO input); // ClinicInputDTO input);
+        void UpdateClinic(int clinicId, ClinicInputDTO input); // int clinicId, ClinicInputDTO input);
         bool DeleteClinic(int clinicId);
         Clinic GetClinicById(int clinicId);
         IEnumerable<ClinicOutputDTO> GetAllClinics();

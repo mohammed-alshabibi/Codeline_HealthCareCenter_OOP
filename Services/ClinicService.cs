@@ -5,6 +5,7 @@ using Codeline_HealthCareCenter_OOP.DTO_s;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
+    /// Interface for Clinic Service
     public class ClinicService : IClinicService
     {
         private List<Clinic> clinics = new List<Clinic>();
@@ -21,7 +22,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             };
             clinics.Add(clinic);
         }
-
+        /// Updates an existing clinic based on the clinicId
         public void UpdateClinic(int clinicId, ClinicInputDTO input)
         {
             var clinic = clinics.FirstOrDefault(c => c.ClinicId == clinicId);
@@ -32,7 +33,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 clinic.Location = input.Location;
             }
         }
-
+        /// Deletes a clinic based on the clinicId
         public bool DeleteClinic(int clinicId)
         {
             var clinic = clinics.FirstOrDefault(c => c.ClinicId == clinicId);
@@ -43,12 +44,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
             return false;
         }
-
+        // / Retrieves a clinic by its ID
         public Clinic GetClinicById(int clinicId)
         {
             return clinics.FirstOrDefault(c => c.ClinicId == clinicId);
         }
 
+        /// Retrieves all clinics and maps them to ClinicOutputDTO
         public IEnumerable<ClinicOutputDTO> GetAllClinics()
         {
             return clinics.Select(c => new ClinicOutputDTO

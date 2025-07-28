@@ -28,7 +28,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
             bookings.Add(booking);
         }
 
-        public void CancelAppointment(BookingInputDTO input, int patientId)
+
+        /// Cancels an appointment for a patient
+        public void CancelAppointment(BookingInputDTO input, int patientId) 
         {
             var booking = bookings.FirstOrDefault(b =>
                 b.PatientId == patientId &&
@@ -41,6 +43,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
+        /// Deletes appointments based on the input criteria
         public void DeleteAppointments(BookingInputDTO input)
         {
             bookings.RemoveAll(b =>
@@ -49,6 +52,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 b.AppointmentTime == input.AppointmentTime);
         }
 
+
+        /// Retrieves all bookings and maps them to BookingOutputDTO
         public IEnumerable<BookingOutputDTO> GetAllBooking()
         {
             return bookings.Select(MapToOutputDTO);
@@ -81,25 +86,28 @@ namespace Codeline_HealthCareCenter_OOP.Services
             return available;
         }
 
+
+        /// Retrieves booked appointments for a specific patient
         public IEnumerable<BookingOutputDTO> GetBookedAppointments(int patientId)
         {
             return bookings
                 .Where(b => b.PatientId == patientId)
                 .Select(MapToOutputDTO);
         }
-
+        // /// Retrieves a booking by its ID
         public Booking GetBookingById(int bookingId)
         {
             return bookings.FirstOrDefault(b => b.BookingId == bookingId);
         }
 
+        /// Retrieves bookings for a specific clinic and date
         public IEnumerable<Booking> GetBookingsByClinicAndDate(int clinicId, DateTime date)
         {
             return bookings.Where(b =>
                 b.ClinicId == clinicId &&
                 b.AppointmentDate.Date == date.Date);
         }
-
+        // /// Retrieves scheduled appointments for a specific clinic and date
         public IEnumerable<Booking> ScheduledAppointments(int clinicId, DateTime appointmentDate)
         {
             return bookings.Where(b =>
@@ -107,6 +115,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 b.AppointmentDate.Date == appointmentDate.Date);
         }
 
+        /// Updates a booked appointment for a patient
         public void UpdateBookedAppointment(BookingInputDTO previous, BookingInputDTO updated, int patientId)
         {
             var booking = bookings.FirstOrDefault(b =>
@@ -124,6 +133,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
+        /// Maps a Booking object to a BookingOutputDTO
         private BookingOutputDTO MapToOutputDTO(Booking b)
         {
             return new BookingOutputDTO
