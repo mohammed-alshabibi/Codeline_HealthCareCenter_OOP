@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codeline_HealthCareCenter_OOP.Models
+namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
-    public class PatientRecord // Represents a patient's medical record
-    {
+    public class PatientRecordOutputDTO // Represents the output DTO for patient records
+    { 
         public int RecordId { get; set; } // Unique identifier for the patient record
-        public int PatientId { get; set; } // Unique identifier for the patient associated with the record
         public string PatientName { get; set; } // Name of the patient associated with the record
         public string Diagnosis { get; set; } // Diagnosis given to the patient in the record
         public string Treatment { get; set; } // Treatment prescribed for the patient in the record
