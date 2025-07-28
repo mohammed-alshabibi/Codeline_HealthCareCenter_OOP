@@ -6,16 +6,16 @@ using HospitalSystem.Services;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        StartSystem();
+        await StartSystem();
     }
-
-    static void StartSystem()
+    static async Task StartSystem()
     {
         IUserService userService = new UserService();
         IDoctorService doctorService = new DoctorService();
         IPatientService patientService = new PatientService();
+        IAuthService authService = new AuthService();
 
         bool exit = false;
 
@@ -32,15 +32,15 @@ class Program
             switch (choice)
             {
                 case "1":
-                    SuperAdminLogin(userService, doctorService, patientService);
+                    SuperAdminLogin(userService, doctorService, patientService, authService);
                     break;
 
                 case "2":
-                    AdminLogin(userService, patientService);
+                    AdminLogin(userService, patientService, authService);
                     break;
 
                 case "3":
-                    PatientLogin(userService);
+                    PatientLogin(userService, authService);
                     break;
 
                 case "0":
@@ -66,7 +66,7 @@ class Program
             Console.WriteLine("2. Add Doctor");
             Console.WriteLine("3. View All Admins");
             Console.WriteLine("4. View All Doctors");
-            Console.WriteLine("5. Let Patient Sign Up");
+            Console.WriteLine("5. Patient Sign Up");
             Console.WriteLine("0. Logout");
 
             string choice = Ask("Choose");
@@ -176,7 +176,8 @@ class Program
         }
     }
 
-    static void SuperAdminLogin(IUserService userService, IDoctorService doctorService, IPatientService patientService)
+    static async Task SuperAdminLogin(IUserService userService, IDoctorService doctorService, IPatientService patientService, IAuthService authService)
+
     {
         Console.WriteLine("=== SuperAdmin Login ===");
         string email = Ask("Email");
@@ -185,17 +186,21 @@ class Program
         var user = userService.AuthenticateUser(email, password);
         if (user != null && user.Role == "SuperAdmin")
         {
-            Console.WriteLine($"✅ Welcome, {user.FullName}");
+            Console.WriteLine($" Welcome, {user.FullName}");
             ShowSuperAdminMenu(userService, doctorService, patientService);
         }
         else
         {
-            Console.WriteLine("❌ Invalid SuperAdmin credentials.");
+            Console.WriteLine("Invalid SuperAdmin credentials.");
         }
+        await authService.SaveTokenToCookie(user.UserID.ToString());
+        ShowSuperAdminMenu(userService, doctorService, patientService);
+
     }
 
 
-    static void AdminLogin(IUserService userService, IPatientService patientService)
+    static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
+
     {
         Console.WriteLine("=== Admin Login ===");
 
@@ -213,9 +218,12 @@ class Program
         {
             Console.WriteLine("Invalid Admin credentials.");
         }
+        await authService.SaveTokenToCookie(admin.UserID.ToString());
+        ShowAdminMenu(userService, patientService);
+
     }
 
-    static void PatientLogin(IUserService userService)
+    static async Task PatientLogin(IUserService userService, IAuthService authService)
     {
         Console.WriteLine("=== Patient Login ===");
 
@@ -231,8 +239,11 @@ class Program
         }
         else
         {
-            Console.WriteLine("❌ Invalid Patient credentials.");
+            Console.WriteLine(" Invalid Patient credentials.");
         }
+        await authService.SaveTokenToCookie(patient.UserID.ToString());
+        ShowPatientMenu(patient);
+
     }
 
 
@@ -275,23 +286,6 @@ class Program
         userService.AddUser(doctor);
 
         Console.WriteLine(" Doctor created successfully.");
-    }
-    static void AddPatient(IPatientService patientService)
-    {
-        Console.WriteLine("=== Patient Signup ===");
-
-        var input = new PatientInputDTO
-        {
-            FullName = Ask("Full Name"),
-            Email = Ask("Email"),
-            Password = Ask("Password"),
-            PhoneNumber = Ask("Phone Number"),
-            Gender = Ask("Gender"),
-            Age = int.Parse(Ask("Age")),
-            NationalID = Ask("National ID")
-        };
-
-        patientService.AddPatient(input);
     }
     static void PatientSelfSignup(IPatientService patientService)
     {
