@@ -83,8 +83,8 @@ class Program
                     break;
 
                 case "3":
-                    adminService = new AdminService();
-                    adminService.ShowAllAdmins();
+                    AdminService adminService0 = new AdminService();
+                    adminService0.ShowAllAdmins();
                     break;
 
                 case "4":
