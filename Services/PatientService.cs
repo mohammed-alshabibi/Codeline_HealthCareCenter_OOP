@@ -1,4 +1,5 @@
 ﻿using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
 using Codeline_HealthCareCenter_OOP.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,18 @@ namespace Codeline_HealthCareCenter_OOP.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly List<Patient> _patients = new();
+        private List<Patient> _patients;
+        private readonly string _filePath = "data/patients.txt"; // You can delete this if you move to helper
 
+        public PatientService()
+        {
+            _patients = PatientDataHelper.Load();
+        }
+
+        public void SaveToFile()
+        {
+            PatientDataHelper.Save(_patients);
+        }
         public void AddPatient(PatientInputDTO input)
         {
             var patient = new Patient(
@@ -42,6 +53,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (p != null)
                 p.PhoneNumber = phone;
         }
+
 
         public PatienoutputDTO GetPatientData(string? name, int? Pid)
         {

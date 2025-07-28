@@ -29,7 +29,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
             get; private set;
         }
 
-        protected string Gender
+        public string Gender
         {
             get => _gender;
             set => _gender = value;

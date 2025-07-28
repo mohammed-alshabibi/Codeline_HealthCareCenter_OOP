@@ -74,7 +74,8 @@ class Program
             switch (choice)
             {
                 case "1":
-                    AddAdmin(userService);
+                    AdminService adminService = new AdminService();
+                    adminService.AddAdmin();
                     break;
 
                 case "2":
@@ -82,8 +83,8 @@ class Program
                     break;
 
                 case "3":
-                    foreach (var a in userService.GetUserByRole("Admin"))
-                        Console.WriteLine($"{a.FullName} | {a.Email}");
+                    AdminService adminService0 = new AdminService();
+                    adminService0.ShowAllAdmins();
                     break;
 
                 case "4":
@@ -246,20 +247,6 @@ class Program
 
     }
 
-
-    static void AddAdmin(IUserService userService)
-    {
-        Console.WriteLine("=== Add Admin ===");
-
-        string name = Ask("Full Name");
-        string email = Ask("Email");
-        string password = Ask("Password");
-
-        var admin = new User(name, email, password, "Admin");
-        userService.AddStaff(admin);
-
-        Console.WriteLine(" Admin created successfully.");
-    }
 
     static void AddDoctor(IUserService userService)
     {

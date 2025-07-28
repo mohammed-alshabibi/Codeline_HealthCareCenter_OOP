@@ -1,4 +1,5 @@
 ﻿using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
 using Codeline_HealthCareCenter_OOP.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,16 @@ namespace Codeline_HealthCareCenter_OOP.Services
     public class DoctorService : IDoctorService
     {
         private readonly List<Doctor> _doctors = new();
+
+        public DoctorService()
+        {
+            _doctors = DoctorDataHelper.Load();
+        }
+
+        public void SaveToFile()
+        {
+            DoctorDataHelper.Save(_doctors);
+        }
 
         public void AddDoctor(DoctorInput input)
         {
@@ -108,12 +119,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public IEnumerable<DoctorOutPutDTO> GetDoctorsByBranchName(string branchName)
         {
-            return Enumerable.Empty<DoctorOutPutDTO>(); // placeholder
+            return Enumerable.Empty<DoctorOutPutDTO>(); 
         }
 
         public IEnumerable<DoctorOutPutDTO> GetDoctorsByDepartmentName(string departmentName)
         {
-            return Enumerable.Empty<DoctorOutPutDTO>(); // placeholder
+            return Enumerable.Empty<DoctorOutPutDTO>(); 
         }
 
         public bool EmailExists(string email)
