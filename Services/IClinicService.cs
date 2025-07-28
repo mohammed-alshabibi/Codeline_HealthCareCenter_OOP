@@ -1,20 +1,15 @@
-﻿using Codeline_HealthCareCenter_OOP.DTO_s;
+﻿using System.Collections.Generic;
 using Codeline_HealthCareCenter_OOP.Models;
+using Codeline_HealthCareCenter_OOP.DTO_s;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IClinicService
     {
-        void AddClinic(ClinicInput input);
-        IEnumerable<Clinic> GetAllClinic();
-        IEnumerable<Clinic> GetClinicByBranchDep(int bid, int depid);
+        void AddClinic(ClinicInputDTO input);
+        void UpdateClinic(int clinicId, ClinicInputDTO input);
+        bool DeleteClinic(int clinicId);
         Clinic GetClinicById(int clinicId);
-        Clinic GetClinicByName(string clinicName);
-        string GetClinicName(int cid);
-        IEnumerable<Clinic> GetClinicsByBranchName(string branchName);
-        IEnumerable<Clinic> GetClinicsByDepartmentId(int departmentId);
-        decimal GetPrice(int clinicId);
-        void SetClinicStatus(int clinicId);
-        void UpdateClinicDetails(int CID, ClinicInput input);
+        IEnumerable<ClinicOutputDTO> GetAllClinics();
     }
 }

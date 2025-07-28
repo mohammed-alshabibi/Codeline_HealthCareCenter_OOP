@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codeline_HealthCareCenter_OOP.Models
+
+namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
-    public class PatientRecord
+    public class PatientRecordInputDTO
     {
-        public int RecordId { get; set; }
         public int PatientId { get; set; }
         public string PatientName { get; set; }
         public string Diagnosis { get; set; }

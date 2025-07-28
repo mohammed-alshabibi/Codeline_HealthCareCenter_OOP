@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Codeline_HealthCareCenter_OOP.Models
+namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
-
-          public class Clinic
+    public class ClinicOutputDTO
     {
         public int ClinicId { get; set; }
         public string ClinicName { get; set; }
         public string Department { get; set; }
         public string Location { get; set; }
     }
-            
-    }
+}
 
