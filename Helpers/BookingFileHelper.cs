@@ -10,7 +10,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
     {
         private const string FilePath = "bookings.txt";
 
-        // ✅ Save list of bookings to file
+        //  Save list of bookings to file
         public static void Save(List<Booking> bookings)
         {
             var lines = bookings.Select(b =>
@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             File.WriteAllLines(FilePath, lines);
         }
 
-        // ✅ Load list of bookings from file
+        //  Load list of bookings from file
         public static List<Booking> Load()
         {
             if (!File.Exists(FilePath))
