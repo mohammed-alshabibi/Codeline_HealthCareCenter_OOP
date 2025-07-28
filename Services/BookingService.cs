@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
-    public class BookingService : IBookingService
+    public class BookingService : IBookingService // IBookingService
     {
-        private List<Booking> bookings = new List<Booking>();
-        private int bookingCounter = 1;
+        private List<Booking> bookings = new List<Booking>(); // List<Booking>
+        private int bookingCounter = 1; // Counter for booking IDs
 
-        public void BookAppointment(BookingInputDTO input, int patientId)
+        public void BookAppointment(BookingInputDTO input, int patientId) // BookingInputDTO input, int patientId)
         {
-            var booking = new Booking
+            var booking = new Booking // Booking
             {
-                BookingId = bookingCounter++,
-                PatientId = patientId,
-                ClinicId = input.ClinicId ?? 0,
-                DepartmentId = input.DepartmentId ?? 0,
-                DoctorId = input.DoctorId ?? 0,
+                BookingId = bookingCounter++, // Increment booking ID for each new booking
+                PatientId = patientId, // PatientId
+                ClinicId = input.ClinicId ?? 0, // ClinicId
+                DepartmentId = input.DepartmentId ?? 0, // DepartmentId
+                DoctorId = input.DoctorId ?? 0, 
                 AppointmentDate = input.AppointmentDate,
                 AppointmentTime = input.AppointmentTime
             };
