@@ -66,7 +66,7 @@ class Program
             Console.WriteLine("2. Add Doctor");
             Console.WriteLine("3. View All Admins");
             Console.WriteLine("4. View All Doctors");
-            Console.WriteLine("5. Let Patient Sign Up");
+            Console.WriteLine("5. Patient Sign Up");
             Console.WriteLine("0. Logout");
 
             string choice = Ask("Choose");
