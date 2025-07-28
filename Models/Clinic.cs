@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Codeline_HealthCareCenter_OOP.Models
 {
-    class Clinic
+
+          public class Clinic
     {
+        public int ClinicId { get; set; }
+        public string ClinicName { get; set; }
+        public string Department { get; set; }
+        public string Location { get; set; }
     }
-}
+            
+    }
+
