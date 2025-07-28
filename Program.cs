@@ -22,9 +22,7 @@ class Program
         while (!exit)
         {
             Console.WriteLine("\n=== Codeline HealthCare System ===");
-            Console.WriteLine("1. Login as SuperAdmin");
-            Console.WriteLine("2. Login as Admin");
-            Console.WriteLine("3. Login as Patient");
+            Console.WriteLine("1. Login SuperAdmin");
             Console.WriteLine("0. Exit");
 
             string choice = Ask("Choose");
@@ -34,70 +32,8 @@ class Program
                 case "1":
                     SuperAdminLogin(userService, doctorService, patientService, authService);
                     break;
-
-                case "2":
-                    AdminLogin(userService, patientService, authService);
-                    break;
-
-                case "3":
-                    PatientLogin(userService, authService);
-                    break;
-
                 case "0":
                     Console.WriteLine(" Exiting system. Goodbye!");
-                    exit = true;
-                    break;
-
-                default:
-                    Console.WriteLine(" Invalid option.");
-                    break;
-            }
-        }
-    }
-
-    static void ShowSuperAdminMenu(IUserService userService, IDoctorService doctorService, IPatientService patientService)
-    {
-        bool exit = false;
-
-        while (!exit)
-        {
-            Console.WriteLine("\n=== SuperAdmin Panel ===");
-            Console.WriteLine("1. Add Admin");
-            Console.WriteLine("2. Add Doctor");
-            Console.WriteLine("3. View All Admins");
-            Console.WriteLine("4. View All Doctors");
-            Console.WriteLine("5. Patient Sign Up");
-            Console.WriteLine("0. Logout");
-
-            string choice = Ask("Choose");
-
-            switch (choice)
-            {
-                case "1":
-                    AdminService adminService = new AdminService();
-                    adminService.AddAdmin();
-                    break;
-
-                case "2":
-                    AddDoctor(userService);
-                    break;
-
-                case "3":
-                    AdminService adminService0 = new AdminService();
-                    adminService0.ShowAllAdmins();
-                    break;
-
-                case "4":
-                    foreach (var d in userService.GetUserByRole("Doctor"))
-                        Console.WriteLine($"{d.FullName} | {d.Email}");
-                    break;
-
-                case "5":
-                    PatientSelfSignup(patientService);
-                    break;
-
-                case "0":
-                    Console.WriteLine("Logged out.");
                     exit = true;
                     break;
 

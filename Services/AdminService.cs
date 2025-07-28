@@ -1,4 +1,6 @@
-﻿using Codeline_HealthCareCenter_OOP.Helpers;
+﻿using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
+using Codeline_HealthCareCenter_OOP.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,34 +17,34 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             _admins = AdminDataHelper.Load();
         }
-
-        public void AddAdmin()
+        public UserOutputDTO? Login(string email, string password)
         {
-            Console.WriteLine(" Enter Admin Details");
+            var admin = _admins.FirstOrDefault(a =>
+                a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+                a.Password == password);
 
-            Console.Write("Full Name: ");
-            string fullName = Console.ReadLine();
+            if (admin == null) return null;
 
-            Console.Write("Email: ");
-            string email = Console.ReadLine();
+            return new UserOutputDTO
+            {
+                FullName = admin.FullName,
+                Email = admin.Email,
+                Role = admin.Role
+            };
+        }
+        public void AddAdmin(UserInputDTO input)
+        {
+            string phoneNumber = "00000000"; // You can also collect this from UI
+            string adminId = "ADM" + (_admins.Count + 1).ToString("D3");
 
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-
-            Console.Write("Phone Number: ");
-            string phoneNumber = Console.ReadLine();
-
-            Console.Write("Admin ID: ");
-            string adminId = Console.ReadLine();
-
-            Admin newAdmin = new Admin(fullName, email, password, phoneNumber, adminId);
+            Admin newAdmin = new Admin(input.FullName, input.Email, input.Password, phoneNumber, adminId);
             _admins.Add(newAdmin);
-
             AdminDataHelper.Save(_admins);
-            Console.WriteLine(" Admin added successfully.");
+
+            Console.WriteLine(" Admin created and saved.");
         }
 
-        public void ShowAllAdmins()
+        public void ShowAllAdmins() 
         {
             Console.WriteLine("\n Registered Admins:");
             foreach (var admin in _admins)
