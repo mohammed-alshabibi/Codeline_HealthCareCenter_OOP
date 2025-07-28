@@ -185,12 +185,12 @@ class Program
         var user = userService.AuthenticateUser(email, password);
         if (user != null && user.Role == "SuperAdmin")
         {
-            Console.WriteLine($"✅ Welcome, {user.FullName}");
+            Console.WriteLine($" Welcome, {user.FullName}");
             ShowSuperAdminMenu(userService, doctorService, patientService);
         }
         else
         {
-            Console.WriteLine("❌ Invalid SuperAdmin credentials.");
+            Console.WriteLine("Invalid SuperAdmin credentials.");
         }
     }
 
@@ -275,23 +275,6 @@ class Program
         userService.AddUser(doctor);
 
         Console.WriteLine(" Doctor created successfully.");
-    }
-    static void AddPatient(IPatientService patientService)
-    {
-        Console.WriteLine("=== Patient Signup ===");
-
-        var input = new PatientInputDTO
-        {
-            FullName = Ask("Full Name"),
-            Email = Ask("Email"),
-            Password = Ask("Password"),
-            PhoneNumber = Ask("Phone Number"),
-            Gender = Ask("Gender"),
-            Age = int.Parse(Ask("Age")),
-            NationalID = Ask("National ID")
-        };
-
-        patientService.AddPatient(input);
     }
     static void PatientSelfSignup(IPatientService patientService)
     {
