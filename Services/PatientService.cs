@@ -14,6 +14,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
     {
         private List<Patient> _patients;
         private readonly string _filePath = "data/patients.txt"; // You can delete this if you move to helper
+        private readonly IBookingService _bookingService;
+
 
         public PatientService()
         {
@@ -145,6 +147,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
             Console.Write($"{label}: ");
             return Console.ReadLine();
         }
+
+        public IEnumerable<BookingInputDTO> GetAvailableAppointments(int clinicId, int departmentId)
+        {
+            return _bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
+        }
+
     }
 }
 

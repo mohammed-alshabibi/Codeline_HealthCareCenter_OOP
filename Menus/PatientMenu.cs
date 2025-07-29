@@ -104,6 +104,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "2":
 
                         Console.Clear();
+                        ViewAvailableBookings();
                         Console.WriteLine(" Book Appointment");
 
                         Console.Write("Clinic ID: ");
@@ -191,6 +192,40 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.ReadKey();
         }
 
+        private static void ViewAvailableBookings()
+        {
+            Console.Clear();
+            Console.WriteLine("=== View Available Bookings ===");
+
+            Console.Write("Enter Clinic ID: ");
+            int clinicId = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter Department ID: ");
+            int departmentId = int.Parse(Console.ReadLine());
+
+            // Create an instance of BookingService
+            BookingService bookingService = new BookingService();
+
+            var availableSlots = bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
+
+            if (!availableSlots.Any())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("❌ No available appointment slots found.");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n✅ Available Appointment Slots:");
+                foreach (var slot in availableSlots)
+                {
+                    Console.WriteLine($"- {slot.AppointmentDate:yyyy-MM-dd} at {slot.AppointmentTime}");
+                }
+            }
+
+            Console.ResetColor();
+            Pause();
+        }
 
     }
 }
