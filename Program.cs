@@ -3,7 +3,6 @@ using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Menus;
 using Codeline_HealthCareCenter_OOP.Models;
 using Codeline_HealthCareCenter_OOP.Services;
-using HospitalSystem.Services;
 
 class Program
 {
@@ -82,46 +81,19 @@ class Program
             }
         }
     }
-    static void ShowPatientMenu(User patient)
-    {
-        bool exit = false;
-
-        while (!exit)
-        {
-            Console.WriteLine($"\n=== Patient Menu ({patient.FullName}) ===");
-            Console.WriteLine("1. View My Info");
-            Console.WriteLine("0. Logout");
-
-            string choice = Ask("Choose");
-
-            switch (choice)
-            {
-                case "1":
-                    Console.WriteLine($"Name: {patient.FullName}");
-                    Console.WriteLine($"Email: {patient.Email}");
-                    Console.WriteLine($"Role: {patient.Role}");
-                    break;
-
-                case "0":
-                    Console.WriteLine(" Logged out.");
-                    exit = true;
-                    break;
-
-                default:
-                    Console.WriteLine(" Invalid option.");
-                    break;
-            }
-        }
-    }
 
     static async Task SuperAdminLogin(IUserService userService, IDoctorService doctorService, IPatientService patientService, IAuthService authService)
-
     {
-        Console.WriteLine("=== SuperAdmin Login ===");
-        string email = Ask("Email");
-        string password = Ask("Password");
+        Console.WriteLine("===  SuperAdmin Login ===");
 
-        var user = userService.AuthenticateUser(email, password);
+        var input = new UserInputDTO
+        {
+            Email = Ask("Email:"),
+            Password = Ask("Password:")
+        };
+
+        var user = userService.AuthenticateUser(input);
+
         if (user != null && user.Role == "SuperAdmin")
         {
             Console.WriteLine($" Welcome, {user.FullName}");
@@ -129,12 +101,17 @@ class Program
         }
         else
         {
-            Console.WriteLine("Invalid SuperAdmin credentials.");
-        }
-        await authService.SaveTokenToCookie(user.UserID.ToString());
-        SuperAdminMenu.Show();
+            Console.WriteLine(" Invalid SuperAdmin credentials.");
 
+            if (user != null)
+                await authService.SaveTokenToCookie(user.UserID.ToString());
+            else
+                await authService.SaveTokenToCookie("unauthorized");
+
+            SuperAdminMenu.Show();
+        }
     }
+
 
 
 
@@ -142,52 +119,29 @@ class Program
     {
         Console.WriteLine("=== Patient Login ===");
 
-        string email = Ask("Email");
-        string password = Ask("Password");
+        var input = new PatientInputDTO
+        {
+            Email = Ask("Email:"),
+            Password = Ask("Password:")
+        };
 
-        var patient = userService.AuthenticateUser(email, password);
+        var patient = patientService.AuthenticatePatient(input);
 
-        if (patient != null && patient.Role == "Patient")
+
+        if (patient != null)
         {
             Console.WriteLine($" Welcome, {patient.FullName}!");
-            SuperAdminMenu.Show();
+            PatientMenu.Show(patient);
         }
         else
         {
             Console.WriteLine(" Invalid Patient credentials.");
         }
         await authService.SaveTokenToCookie(patient.UserID.ToString());
-        SuperAdminMenu.Show();
+        PatientMenu.Show(patient);
 
     }
 
-
-    static void AddDoctor(IUserService userService)
-    {
-        Console.WriteLine("=== Add Doctor ===");
-
-        string name = Ask("Full Name");
-        string email = Ask("Email");
-        string password = Ask("Password");
-        string specialization = Ask("Specialization");
-        string phone = Ask("Phone Number");
-        string gender = Ask("Gender");
-
-        int experience;
-        while (!int.TryParse(Ask("Years of Experience"), out experience))
-            Console.WriteLine(" Enter a valid number.");
-
-        double salary;
-        while (!double.TryParse(Ask("Salary"), out salary))
-            Console.WriteLine(" Enter a valid amount.");
-
-        string availability = Ask("Availability");
-
-        var doctor = new Doctor(name, email, password, specialization, phone, gender, experience, salary, availability);
-        userService.AddUser(doctor);
-
-        Console.WriteLine(" Doctor created successfully.");
-    }
     static void PatientSelfSignup(IPatientService patientService)
     {
         Console.WriteLine("=== Patient Self Signup ===");
