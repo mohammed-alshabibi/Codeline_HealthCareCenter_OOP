@@ -9,7 +9,6 @@ namespace Codeline_HealthCareCenter_OOP.Services
         int AddStaff(User InputUser);
         void AddSuperAdmin(UserInputDTO InputUser);
         void AddUser(User user);
-        //User AuthenticateUser(string email, string password);
         UserOutputDTO AuthenticateUser(UserInputDTO dto);
         void DeactivateUser(int uid);
         bool EmailExists(string email);

@@ -10,7 +10,6 @@ namespace Codeline_HealthCareCenter_OOP.Services
         void UpdatePatientDetails(int UID, string phoneNumber);
         void AddPatient(PatientInputDTO patientInput);
         Patient GetPatientByName(string PatientName);
-        PatienoutputDTO GetPatientData(string? userName, int? Pid);
-
+        PatienoutputDTO AuthenticatePatient(PatientInputDTO dto);
     }
 }
