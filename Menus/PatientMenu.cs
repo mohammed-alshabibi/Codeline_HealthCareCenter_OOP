@@ -17,12 +17,12 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("🏥 Welcome to Patient Portal");
+                Console.WriteLine(" Welcome to Patient Portal");
                 Console.ResetColor();
 
-                Console.WriteLine("1. 📝 Sign Up");
-                Console.WriteLine("2. 🔐 Login");
-                Console.WriteLine("3. ❌ Exit");
+                Console.WriteLine("1.  Sign Up");
+                Console.WriteLine("2.  Login");
+                Console.WriteLine("3.  Exit");
 
                 Console.Write("\nChoose an option: ");
                 string mainChoice = Console.ReadLine();
@@ -45,7 +45,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         if (loggedIn != null)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"\n✅ Welcome {loggedIn.FullName}");
+                            Console.WriteLine($"\n Welcome {loggedIn.FullName}");
                             Console.ResetColor();
                             Pause();
                             ShowPatientMenu(loggedIn, bookingService, recordService);
@@ -53,18 +53,18 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("❌ Invalid login.");
+                            Console.WriteLine(" Invalid login.");
                             Console.ResetColor();
                             Pause();
                         }
                         break;
 
                     case "3":
-                        Console.WriteLine("👋 Goodbye!");
+                        Console.WriteLine(" Goodbye!");
                         return;
 
                     default:
-                        Console.WriteLine("❌ Invalid option.");
+                        Console.WriteLine(" Invalid option.");
                         Pause();
                         break;
                 }
