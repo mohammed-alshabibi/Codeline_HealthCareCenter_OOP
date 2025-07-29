@@ -54,7 +54,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         Pause();
                         break;
                     case "4":
-                        branchService.AddBranch();
+                        branchService.AddBranchFromInput();
                         Pause();
                         break;
                     case "5":
