@@ -131,5 +131,43 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             return _doctors.Any(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
+
+
+        private List<PatientRecord> _patientRecords = new(); // Add this field if needed
+
+        public void AssignToClinic(int doctorId, int clinicId, int departmentId)
+        {
+            var doc = _doctors.FirstOrDefault(d => d.UserID == doctorId);
+            if (doc != null)
+            {
+                doc.ClinicId = clinicId;
+                doc.DepartmentId = departmentId;
+                SaveToFile(); // Save the updated doctor lisT
+            }
+        }
+
+        public IEnumerable<PatientRecord> GetDoctorPatientRecords(int doctorId)
+        {
+            return _patientRecords.Where(p => p.DoctorId == doctorId);
+        }
+
+        public void AddOrUpdatePatientRecord(int doctorId, PatientRecord record)
+        {
+            var existing = _patientRecords.FirstOrDefault(p => p.RecordId == record.RecordId);
+
+            if (existing != null)
+            {
+                existing.Notes = record.Notes;
+                existing.VisitDate = record.VisitDate;
+    
+            }
+            else
+            {
+                record.DoctorId = doctorId;
+                record.RecordId = _patientRecords.Count > 0 ? _patientRecords.Max(p => p.RecordId) + 1 : 1;
+                _patientRecords.Add(record);
+            }
+        }
+
     }
 }
