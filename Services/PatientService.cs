@@ -23,22 +23,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             PatientDataHelper.Save(_patients);
         }
-        public void AddPatient(PatientInputDTO input)
-        {
-            var patient = new Patient(
-                input.FullName,
-                input.Email,
-                input.Password,
-                input.PhoneNumber,
-                input.Gender,
-                input.Age,
-                input.NationalID
-            );
-
-            _patients.Add(patient);
-            Console.WriteLine(" Patient added successfully.");
-        }
-
+     
         public IEnumerable<Patient> GetAllPatients() => _patients;
 
         public Patient GetPatientById(int Pid) =>
@@ -53,6 +38,87 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (p != null)
                 p.PhoneNumber = phone;
         }
+
+        static async Task PatientLogin(IPatientService patientService, IAuthService authService)
+        {
+            Console.WriteLine("=== Patient Login ===");
+
+            var input = new PatientInputDTO
+            {
+                Email = Ask("Email:"),
+                Password = Ask("Password:")
+            };
+
+            var patient = patientService.AuthenticatePatient(input); //  use object, not class
+
+            if (patient != null)
+            {
+                Console.WriteLine($" Welcome, {patient.FullName}!");
+                await authService.SaveTokenToCookie("patient_login"); // use a static label or generate token
+                PatientMenu.Show(patient); //  show only on success
+            }
+            else
+            {
+                Console.WriteLine(" Invalid Patient credentials.");
+                await authService.SaveTokenToCookie("unauthorized");
+            }
+        }
+        public void AddPatient(PatientInputDTO input)
+        {
+            var newPatient = new Patient
+                (
+                input.FullName,
+                input.Email,
+                input.Password,
+                input.PhoneNumber,
+                input.Gender,
+                input.Age,
+                input.NationalID
+                );
+
+            _patients.Add(newPatient);
+            SaveToFile(); // existing method to persist patients
+
+            Console.WriteLine(" Patient added successfully.");
+        }
+        static void PatientSelfSignup(IPatientService patientService)
+        {
+            Console.WriteLine("=== Patient Self Signup ===");
+
+            PatientInputDTO input = new()
+            {
+                FullName = Ask("Full Name"),
+                Email = Ask("Email"),
+                Password = Ask("Password"),
+                PhoneNumber = Ask("Phone Number"),
+                Gender = Ask("Gender"),
+                Age = int.Parse(Ask("Age")),
+                NationalID = Ask("National ID")
+            };
+
+            patientService.AddPatient(input);
+            Console.WriteLine("Patient signed up successfully.");
+        }
+
+        static void AddPatientFromAdmin(IPatientService patientService)
+        {
+            Console.WriteLine("=== Add Patient (By Admin) ===");
+
+            PatientInputDTO input = new()
+            {
+                FullName = Ask("Full Name"),
+                Email = Ask("Email"),
+                Password = Ask("Password"),
+                PhoneNumber = Ask("Phone Number"),
+                Gender = Ask("Gender"),
+                Age = int.Parse(Ask("Age")),
+                NationalID = Ask("National ID")
+            };
+
+            patientService.AddPatient(input);
+            Console.WriteLine(" Patient added by admin successfully.");
+        }
+
 
         public PatienoutputDTO AuthenticatePatient(PatientInputDTO dto)
         {
@@ -72,6 +138,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Age = patient.Age,
                 NationalID = patient.NationalID
             };
+        }
+        static string Ask(string label)
+        {
+            Console.Write($"{label}: ");
+            return Console.ReadLine();
         }
     }
 }
