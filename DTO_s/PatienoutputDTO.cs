@@ -8,6 +8,7 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
     public class PatienoutputDTO
     {
+        public int PatientId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }

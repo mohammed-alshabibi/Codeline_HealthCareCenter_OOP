@@ -45,6 +45,36 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             return _doctors;
         }
+        public Doctor DoctorLogin()
+        {
+            Console.Clear();
+            Console.WriteLine("🔐 Doctor Login");
+
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+
+            Console.Write("Password: ");
+            string password = Console.ReadLine();
+
+            var doctor = _doctors.FirstOrDefault(d =>
+                d.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+                d.Password == password);
+
+            if (doctor != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n Welcome Dr. {doctor.FullName}!");
+                Console.ResetColor();
+                return doctor;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" Invalid email or password.");
+                Console.ResetColor();
+                return null;
+            }
+        }
 
         // You can implement the rest later as needed
         public Doctor GetDoctorById(int uid) => _doctors.FirstOrDefault(d => d.UserID == uid);

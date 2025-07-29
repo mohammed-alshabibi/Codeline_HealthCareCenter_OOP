@@ -8,8 +8,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
         IEnumerable<Patient> GetAllPatients();
         Patient GetPatientById(int Pid);
         void UpdatePatientDetails(int UID, string phoneNumber);
-        void AddPatient(PatientInputDTO patientInput);
         Patient GetPatientByName(string PatientName);
         PatienoutputDTO AuthenticatePatient(PatientInputDTO dto);
+        void AddPatient(PatientInputDTO dto);
+
     }
 }
