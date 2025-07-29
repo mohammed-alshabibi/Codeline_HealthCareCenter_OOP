@@ -31,6 +31,30 @@ namespace Codeline_HealthCareCenter_OOP.Implementations
             _departments.Add(newDept);
             DepartmentFileHelper.SaveDepartments(_departments);
         }
+        //  Used in case "5"
+        public void AddDepartment()
+        {
+            Console.Write("Enter Department Name: ");
+            string name = Console.ReadLine();
+
+            var dto = new DepartmentDTO
+            {
+                DepartmentName = name
+            };
+
+            CreateDepartment(dto);
+            Console.WriteLine(" Department added.");
+        }
+
+        //  Used in case "8"
+        public void ShowDepartments()
+        {
+            Console.WriteLine("\n Departments List:");
+            foreach (var dept in _departments)
+            {
+                Console.WriteLine($"- ID: {dept.DepartmentId}, Name: {dept.DepartmentName}, Active: {dept.IsActive}");
+            }
+        }
 
         public IEnumerable<DepartmentDTO> GetAllDepartments()
         {
