@@ -2,7 +2,6 @@
 using Codeline_HealthCareCenter_OOP.Helpers;
 using Codeline_HealthCareCenter_OOP.Services;
 using Codeline_HealthCareCenter_OOP.DTO_s;
-using HospitalSystem.Services;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -36,13 +35,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
             while (true)
             {
                 Console.Clear();
-               
                 Console.WriteLine("\n=== ADMIN MENU ===\n");
                 Console.WriteLine("1. Manage Clinics");
                 Console.WriteLine("2. Manage Bookings");
                 Console.WriteLine("3. Manage Patient Records");
                 Console.WriteLine("4. Manage Branches & Departments");
                 Console.WriteLine("5. Manage Admin Users");
+                Console.WriteLine("6. Add Patient");
                 Console.WriteLine("0. Exit");
 
                 Console.Write("\nSelect Option: ");
@@ -64,6 +63,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
                         break;
                     case "5":
                         ManageAdmins();
+                        break;
+                    case "6":
+                        AddPatient();
                         break;
                     case "0":
                         Console.WriteLine("Exiting system...");
@@ -209,7 +211,6 @@ namespace Codeline_HealthCareCenter_OOP.Services
             Console.Clear();
             Console.WriteLine("=== Admin Users ===");
 
-            //  Show all admins using the role filter
             var admins = _userService.GetUserByRole("Admin");
             foreach (var admin in admins)
             {
@@ -228,9 +229,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 input.Email = Console.ReadLine();
                 Console.Write("Password: ");
                 input.Password = Console.ReadLine();
-                input.Role = "Admin"; // ✅ Force admin role
+                input.Role = "Admin";
 
-                //  Add super admin
                 _userService.AddSuperAdmin(input);
 
                 Console.WriteLine("✔ Admin added! Press any key...");
@@ -238,6 +238,26 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
+        private void AddPatient()
+        {
+            Console.Clear();
+            Console.WriteLine("=== Add New Patient ===");
+
+            var input = new UserInputDTO();
+
+            Console.Write("Full Name: ");
+            input.FullName = Console.ReadLine();
+            Console.Write("Email: ");
+            input.Email = Console.ReadLine();
+            Console.Write("Password: ");
+            input.Password = Console.ReadLine();
+            input.Role = "Patient";
+
+            _userService.AddSuperAdmin(input);  
+
+
+            Console.WriteLine("✔ Patient added successfully! Press any key...");
+            Console.ReadKey();
+        }
     }
 }
-
