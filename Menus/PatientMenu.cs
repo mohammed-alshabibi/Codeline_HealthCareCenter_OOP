@@ -7,7 +7,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 {
     public static class PatientMenu
     {
-        public static void Show()
+        public static void Show(PatienoutputDTO patient)
         {
             PatientService patientService = new PatientService();
             BookingService bookingService = new BookingService();
