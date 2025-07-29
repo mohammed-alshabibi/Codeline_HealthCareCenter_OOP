@@ -31,6 +31,23 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _branchDeps.Add(bd);
             BranchDepartmentFileHelper.SaveBranchDepartments(_branchDeps);
         }
+        public void AssignDepartmentToBranch()
+        {
+            Console.Write("Enter Branch ID: ");
+            int branchId = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter Department ID: ");
+            int departmentId = int.Parse(Console.ReadLine());
+
+            var dto = new BranchDepDTO
+            {
+                BranchId = branchId,
+                DepartmentId = departmentId
+            };
+
+            AddDepartmentToBranch(dto);
+            Console.WriteLine(" Department assigned to branch.");
+        }
 
         public IEnumerable<DepartmentDTO> GetDepartmentsByBranch(int bid)
         {

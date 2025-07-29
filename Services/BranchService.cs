@@ -32,6 +32,19 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _branches.Add(newBranch);
             BranchFileHelper.SaveBranches(_branches);
         }
+        public void AddBranchFromInput()//add this
+        {
+            var branchDto = new BranchDTO();
+
+            Console.Write("Branch Name: ");
+            branchDto.BranchName = Console.ReadLine();
+
+            Console.Write("Location: ");
+            branchDto.Location = Console.ReadLine();
+
+            AddBranch(branchDto);
+            Console.WriteLine("✅ Branch added.");
+        }
 
         public IEnumerable<Branch> GetAllBranches()
         {
@@ -78,6 +91,14 @@ namespace Codeline_HealthCareCenter_OOP.Services
             {
                 branch.IsActive = isActive;
                 BranchFileHelper.SaveBranches(_branches);
+            }
+        }
+        public void ShowAllBranches()
+        {
+            Console.WriteLine("\n Branch List:");
+            foreach (var branch in _branches)
+            {
+                Console.WriteLine($"- ID: {branch.BranchId}, Name: {branch.BranchName}, Location: {branch.Location}, Active: {branch.IsActive}");
             }
         }
 
