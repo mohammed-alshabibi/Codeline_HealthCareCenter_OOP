@@ -137,29 +137,6 @@ class Program
     }
 
 
-    static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
-
-    {
-        Console.WriteLine("=== Admin Login ===");
-
-        string email = Ask("Email");
-        string password = Ask("Password");
-
-        var admin = userService.AuthenticateUser(email, password);
-
-        if (admin != null && admin.Role == "Admin")
-        {
-            Console.WriteLine($" Welcome, {admin.FullName}");
-            SuperAdminMenu.Show();
-        }
-        else
-        {
-            Console.WriteLine("Invalid Admin credentials.");
-        }
-        await authService.SaveTokenToCookie(admin.UserID.ToString());
-        SuperAdminMenu.Show();
-
-    }
 
     static async Task PatientLogin(IUserService userService, IAuthService authService)
     {

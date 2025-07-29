@@ -47,7 +47,17 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 switch (choice)
                 {
                     case "1":
-                        CreateAdmin(adminService);
+                        var adminDto = new UserInputDTO
+                        {
+                            FullName = Ask("Full Name:"),
+                            Email = Ask("Email:"),
+                            Password = Ask("Password:"),
+                            PhoneNumber = Ask("Phone Number:"),
+                            Role = "Admin"
+                        };
+
+                        adminService.AddAdmin(adminDto); //  Use DTO-based version
+                        Pause();
                         break;
                     case "2":
                         AdminLogin(adminService);
@@ -57,7 +67,20 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         Pause();
                         break;
                     case "4":
-                        doctorService.AddDoctor();
+                        var doctorInput = new DoctorInput
+                        {
+                            FullName = Ask("Full Name:"),
+                            Email = Ask("Email:"),
+                            Password = Ask("Password:"),
+                            Specialization = Ask("Specialization:"),
+                            PhoneNumber = Ask("Phone Number:"),
+                            Gender = Ask("Gender:"),
+                            YearsOfExperience = int.Parse(Ask("Years of Experience:")),
+                            Salary = double.Parse(Ask("Salary:")),
+                            Availability = Ask("Availability (e.g., Available/Busy):")
+                        };
+
+                        doctorService.AddDoctor(doctorInput);
                         Pause();
                         break;
                     case "5":
@@ -114,7 +137,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             input.Role = "Admin";
 
             adminService.AddAdmin(input);
-            Console.WriteLine("✅ Admin created.");
+            Console.WriteLine(" Admin created.");
         }
 
         static void AdminLogin(AdminService adminService)
@@ -135,13 +158,13 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             if (result != null)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\n✅ Welcome {result.FullName} ({result.Role})");
+                Console.WriteLine($"\n Welcome {result.FullName} ({result.Role})");
                 Console.ResetColor();
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ Invalid login.");
+                Console.WriteLine(" Invalid login.");
                 Console.ResetColor();
             }
         }
@@ -151,5 +174,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("\nPress any key to return...");
             Console.ReadKey();
         }
+        private static string Ask(string label)
+        {
+            Console.Write($"{label} ");
+            return Console.ReadLine();
+        }
+
     }
 }

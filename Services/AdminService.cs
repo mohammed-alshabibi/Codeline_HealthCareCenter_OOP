@@ -1,5 +1,6 @@
 ﻿using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Helpers;
+using Codeline_HealthCareCenter_OOP.Menus;
 using Codeline_HealthCareCenter_OOP.Models;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,35 @@ namespace Codeline_HealthCareCenter_OOP.Services
             return _admins.FirstOrDefault(a =>
                 a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
                 a.Password == password);
+        }
+
+        static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
+
+        {
+            Console.WriteLine("=== Admin Login ===");
+
+            string email = Ask("Email");
+            string password = Ask("Password");
+
+            var admin = userService.AuthenticateUser(email, password);
+
+            if (admin != null && admin.Role == "Admin")
+            {
+                Console.WriteLine($" Welcome, {admin.FullName}");
+                SuperAdminMenu.Show();
+            }
+            else
+            {
+                Console.WriteLine("Invalid Admin credentials.");
+            }
+            await authService.SaveTokenToCookie(admin.UserID.ToString());
+            SuperAdminMenu.Show();
+
+        }
+        static string Ask(string label)
+        {
+            Console.Write($"{label}: ");
+            return Console.ReadLine();
         }
     }
 }
