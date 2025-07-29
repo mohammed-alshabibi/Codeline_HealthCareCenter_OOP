@@ -5,6 +5,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IPatientService
     {
+        IEnumerable<BookingInputDTO> GetAvailableAppointments(int clinicId, int departmentId);
+
         IEnumerable<Patient> GetAllPatients();
         Patient GetPatientById(int Pid);
         void UpdatePatientDetails(int UID, string phoneNumber);

@@ -102,6 +102,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         break;
 
                     case "2":
+
                         Console.Clear();
                         Console.WriteLine(" Book Appointment");
 
@@ -189,5 +190,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
+
+
     }
 }
