@@ -37,6 +37,22 @@ public class UserService : IUserService
             user.IsActive = false;
     }
 
+    public UserOutputDTO AuthenticateUser(UserInputDTO dto)
+    {
+        var user = users.FirstOrDefault(u =>
+            u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase) &&
+            u.Password == dto.Password);
+
+        if (user == null) return null;
+
+        return new UserOutputDTO
+        {
+            FullName = user.FullName,
+            Role = user.Role,
+            UserID = user.UserID
+        };
+    }
+
     public bool EmailExists(string email) =>
         users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
 

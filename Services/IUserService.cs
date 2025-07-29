@@ -1,6 +1,7 @@
 ﻿using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Models;
 
+
 namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IUserService
@@ -8,7 +9,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
         int AddStaff(User InputUser);
         void AddSuperAdmin(UserInputDTO InputUser);
         void AddUser(User user);
-        User AuthenticateUser(string email, string password);
+        //User AuthenticateUser(string email, string password);
+        UserOutputDTO AuthenticateUser(UserInputDTO dto);
         void DeactivateUser(int uid);
         bool EmailExists(string email);
         User GetUserById(int uid);

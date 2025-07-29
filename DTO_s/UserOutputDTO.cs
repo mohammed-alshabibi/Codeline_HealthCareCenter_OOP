@@ -11,5 +11,6 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public string UserID { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             AdminService adminService = new AdminService();
             BranchService branchService = new BranchService();
             DepartmentService departmentService = new DepartmentService();
+            DoctorService doctorService = new DoctorService();
             BranchDepartmentService branchDepartmentService = new BranchDepartmentService();
 
             while (true)
@@ -28,15 +29,17 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.WriteLine("1. ➕ Create Admin");
                 Console.WriteLine("2. 🔐 Admin Login");
                 Console.WriteLine("3. 📋 View All Admins");
+                Console.WriteLine("4. ➕ Add Doctors ");
+                Console.WriteLine("5. 🔐 Doctor Login");
 
-                Console.WriteLine("4. 🏨 Create Branch");
-                Console.WriteLine("5. 🏥 Create Department");
-                Console.WriteLine("6. 🔗 Assign Department to Branch");
+                Console.WriteLine("6. 🏨 Create Branch");
+                Console.WriteLine("7. 🏥 Create Department");
+                Console.WriteLine("8. 🔗 Assign Department to Branch");
 
-                Console.WriteLine("7. 📂 View All Branches");
-                Console.WriteLine("8. 📂 View All Departments");
+                Console.WriteLine("9. 📂 View All Branches");
+                Console.WriteLine("10. 📂 View All Departments");
 
-                Console.WriteLine("9. 🔙 Logout");
+                Console.WriteLine("11. 🔙 Logout");
 
                 Console.Write("\nChoose an option: ");
                 string choice = Console.ReadLine();
@@ -54,26 +57,34 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         Pause();
                         break;
                     case "4":
-                        branchService.AddBranch();
+                        doctorService.AddDoctor();
                         Pause();
                         break;
                     case "5":
-                        departmentService.AddDepartment();
+                        doctorService.DoctorLogin();
                         Pause();
                         break;
                     case "6":
-                        branchDepartmentService.AssignDepartmentToBranch();
+                        branchService.AddBranch();
                         Pause();
                         break;
                     case "7":
-                        branchService.ShowAllBranches();
+                        departmentService.AddDepartment();
                         Pause();
                         break;
                     case "8":
-                        departmentService.ShowDepartments();
+                        branchDepartmentService.AssignDepartmentToBranch();
                         Pause();
                         break;
                     case "9":
+                        branchService.ShowAllBranches();
+                        Pause();
+                        break;
+                    case "10":
+                        departmentService.ShowDepartments();
+                        Pause();
+                        break;
+                    case "11":
                         Console.WriteLine("🔓 Logged out...");
                         return;
                     default:
