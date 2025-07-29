@@ -16,6 +16,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             AdminService adminService = new AdminService();
             BranchService branchService = new BranchService();
             DepartmentService departmentService = new DepartmentService();
+            DoctorService doctorService = new DoctorService();
             BranchDepartmentService branchDepartmentService = new BranchDepartmentService();
 
             while (true)
@@ -28,15 +29,17 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.WriteLine("1. ➕ Create Admin");
                 Console.WriteLine("2. 🔐 Admin Login");
                 Console.WriteLine("3. 📋 View All Admins");
+                Console.WriteLine("4. ➕ Add Doctors ");
+                Console.WriteLine("5. 🔐 Doctor Login");
 
-                Console.WriteLine("4. 🏨 Create Branch");
-                Console.WriteLine("5. 🏥 Create Department");
-                Console.WriteLine("6. 🔗 Assign Department to Branch");
+                Console.WriteLine("6. 🏨 Create Branch");
+                Console.WriteLine("7. 🏥 Create Department");
+                Console.WriteLine("8. 🔗 Assign Department to Branch");
 
-                Console.WriteLine("7. 📂 View All Branches");
-                Console.WriteLine("8. 📂 View All Departments");
+                Console.WriteLine("9. 📂 View All Branches");
+                Console.WriteLine("10. 📂 View All Departments");
 
-                Console.WriteLine("9. 🔙 Logout");
+                Console.WriteLine("11. 🔙 Logout");
 
                 Console.Write("\nChoose an option: ");
                 string choice = Console.ReadLine();
@@ -44,7 +47,17 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 switch (choice)
                 {
                     case "1":
-                        CreateAdmin(adminService);
+                        var adminDto = new UserInputDTO
+                        {
+                            FullName = Ask("Full Name:"),
+                            Email = Ask("Email:"),
+                            Password = Ask("Password:"),
+                            PhoneNumber = Ask("Phone Number:"),
+                            Role = "Admin"
+                        };
+
+                        adminService.AddAdmin(adminDto); //  Use DTO-based version
+                        Pause();
                         break;
                     case "2":
                         AdminLogin(adminService);
@@ -54,26 +67,47 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         Pause();
                         break;
                     case "4":
-                        branchService.AddBranchFromInput();
+                        var doctorInput = new DoctorInput
+                        {
+                            FullName = Ask("Full Name:"),
+                            Email = Ask("Email:"),
+                            Password = Ask("Password:"),
+                            Specialization = Ask("Specialization:"),
+                            PhoneNumber = Ask("Phone Number:"),
+                            Gender = Ask("Gender:"),
+                            YearsOfExperience = int.Parse(Ask("Years of Experience:")),
+                            Salary = double.Parse(Ask("Salary:")),
+                            Availability = Ask("Availability (e.g., Available/Busy):")
+                        };
+
+                        doctorService.AddDoctor(doctorInput);
                         Pause();
                         break;
                     case "5":
-                        departmentService.AddDepartment();
+                        doctorService.DoctorLogin();
                         Pause();
                         break;
                     case "6":
-                        branchDepartmentService.AssignDepartmentToBranch();
+                        branchService.AddBranch();
                         Pause();
                         break;
                     case "7":
-                        branchService.ShowAllBranches();
+                        departmentService.AddDepartment();
                         Pause();
                         break;
                     case "8":
-                        departmentService.ShowDepartments();
+                        branchDepartmentService.AssignDepartmentToBranch();
                         Pause();
                         break;
                     case "9":
+                        branchService.ShowAllBranches();
+                        Pause();
+                        break;
+                    case "10":
+                        departmentService.ShowDepartments();
+                        Pause();
+                        break;
+                    case "11":
                         Console.WriteLine("🔓 Logged out...");
                         return;
                     default:
@@ -103,7 +137,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             input.Role = "Admin";
 
             adminService.AddAdmin(input);
-            Console.WriteLine("✅ Admin created.");
+            Console.WriteLine(" Admin created.");
         }
 
         static void AdminLogin(AdminService adminService)
@@ -124,13 +158,13 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             if (result != null)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\n✅ Welcome {result.FullName} ({result.Role})");
+                Console.WriteLine($"\n Welcome {result.FullName} ({result.Role})");
                 Console.ResetColor();
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ Invalid login.");
+                Console.WriteLine(" Invalid login.");
                 Console.ResetColor();
             }
         }
@@ -140,5 +174,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("\nPress any key to return...");
             Console.ReadKey();
         }
+        private static string Ask(string label)
+        {
+            Console.Write($"{label} ");
+            return Console.ReadLine();
+        }
+
     }
 }

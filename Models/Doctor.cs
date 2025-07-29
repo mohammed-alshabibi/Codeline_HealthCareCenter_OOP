@@ -4,24 +4,24 @@ namespace Codeline_HealthCareCenter_OOP.Models
 {
     public class Doctor : User
     {
-        private string _doctorId;
-        private string _specialization;
-        private string _phoneNumber;
-        private string _gender;
-        private int _experience;
-        private double _salary;
-        private string _availability;
+        private string doctorId;
+        private string specialization;
+        private string phoneNumber;
+        private string gender;
+        private int experience;
+        private double salary;
+        private string availability;
 
         public string DoctorID
         {
-            get => _doctorId;
-            private set => _doctorId = value;
+            get => doctorId;
+            private set => doctorId = value;
         }
 
         public string Specialization
         {
-            get => _specialization;
-            set => _specialization = value;
+            get => specialization;
+            set => specialization = value;
         }
 
         public string PhoneNumber
@@ -31,26 +31,26 @@ namespace Codeline_HealthCareCenter_OOP.Models
 
         public string Gender
         {
-            get => _gender;
-            set => _gender = value;
+            get => gender;
+            set => gender = value;
         }
 
         internal int YearsOfExperience
         {
-            get => _experience;
-            set => _experience = value > 0 ? value : 0;
+            get => experience;
+            set => experience = value > 0 ? value : 0;
         }
 
         public double Salary
         {
-            get => _salary;
-            set => _salary = value >= 0 ? value : 0;
+            get => salary;
+            set => salary = value >= 0 ? value : 0;
         }
 
         public string Availability
         {
-            get => _availability;
-            set => _availability = value;
+            get => availability;
+            set => availability = value;
         }
 
         public Doctor(string fullName, string email, string password, string specialization, string phoneNumber,

@@ -1,5 +1,6 @@
 ﻿using System;
 using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Menus;
 using Codeline_HealthCareCenter_OOP.Models;
 using Codeline_HealthCareCenter_OOP.Services;
 using HospitalSystem.Services;
@@ -124,41 +125,18 @@ class Program
         if (user != null && user.Role == "SuperAdmin")
         {
             Console.WriteLine($" Welcome, {user.FullName}");
-            ShowSuperAdminMenu(userService, doctorService, patientService);
+            SuperAdminMenu.Show();
         }
         else
         {
             Console.WriteLine("Invalid SuperAdmin credentials.");
         }
         await authService.SaveTokenToCookie(user.UserID.ToString());
-        ShowSuperAdminMenu(userService, doctorService, patientService);
+        SuperAdminMenu.Show();
 
     }
 
 
-    static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
-
-    {
-        Console.WriteLine("=== Admin Login ===");
-
-        string email = Ask("Email");
-        string password = Ask("Password");
-
-        var admin = userService.AuthenticateUser(email, password);
-
-        if (admin != null && admin.Role == "Admin")
-        {
-            Console.WriteLine($" Welcome, {admin.FullName}");
-            ShowAdminMenu(userService, patientService);
-        }
-        else
-        {
-            Console.WriteLine("Invalid Admin credentials.");
-        }
-        await authService.SaveTokenToCookie(admin.UserID.ToString());
-        ShowAdminMenu(userService, patientService);
-
-    }
 
     static async Task PatientLogin(IUserService userService, IAuthService authService)
     {
@@ -172,14 +150,14 @@ class Program
         if (patient != null && patient.Role == "Patient")
         {
             Console.WriteLine($" Welcome, {patient.FullName}!");
-            ShowPatientMenu(patient);
+            SuperAdminMenu.Show();
         }
         else
         {
             Console.WriteLine(" Invalid Patient credentials.");
         }
         await authService.SaveTokenToCookie(patient.UserID.ToString());
-        ShowPatientMenu(patient);
+        SuperAdminMenu.Show();
 
     }
 

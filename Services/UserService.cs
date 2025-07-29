@@ -1,8 +1,7 @@
 ﻿using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Models;
-using Codeline_HealthCareCenter_OOP.Services;
 
-namespace HospitalSystem.Services;
+using Codeline_HealthCareCenter_OOP.Services;
 
 public class UserService : IUserService
 {
@@ -35,6 +34,22 @@ public class UserService : IUserService
         var user = users.FirstOrDefault(u => u.UserID == uid);
         if (user != null)
             user.IsActive = false;
+    }
+
+    public UserOutputDTO AuthenticateUser(UserInputDTO dto)
+    {
+        var user = users.FirstOrDefault(u =>
+            u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase) &&
+            u.Password == dto.Password);
+
+        if (user == null) return null;
+
+        return new UserOutputDTO
+        {
+            FullName = user.FullName,
+            Role = user.Role,
+            UserID = user.UserID
+        };
     }
 
     public bool EmailExists(string email) =>
@@ -88,4 +103,23 @@ public class UserService : IUserService
                 Role = u.Role
             });
     }
+    public void AddAdmin(UserInputDTO dto)
+    {
+        // Convert DTO to Admin object
+        Admin newAdmin = new Admin(
+            dto.FullName,
+            dto.Email,
+            dto.Password,
+            dto.PhoneNumber,
+            GenerateAdminId() // You can write a helper to generate unique IDs
+        );
+
+        users.Add(newAdmin); // Add to in-memory list
+        Console.WriteLine(" Admin created and saved successfully.");
+    }
+    private string GenerateAdminId()
+    {
+        return "ADM" + DateTime.Now.Ticks.ToString().Substring(10);
+    }
+
 }
