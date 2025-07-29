@@ -114,8 +114,7 @@ class Program
 
 
 
-
-    static async Task PatientLogin(IUserService userService, IAuthService authService)
+    static async Task PatientLogin(IPatientService patientService, IAuthService authService)
     {
         Console.WriteLine("=== Patient Login ===");
 
@@ -125,22 +124,21 @@ class Program
             Password = Ask("Password:")
         };
 
-        var patient = patientService.AuthenticatePatient(input);
-
+        var patient = patientService.AuthenticatePatient(input); //  use object, not class
 
         if (patient != null)
         {
             Console.WriteLine($" Welcome, {patient.FullName}!");
-            PatientMenu.Show(patient);
+            await authService.SaveTokenToCookie("patient_login"); // use a static label or generate token
+            PatientMenu.Show(patient); //  show only on success
         }
         else
         {
             Console.WriteLine(" Invalid Patient credentials.");
+            await authService.SaveTokenToCookie("unauthorized");
         }
-        await authService.SaveTokenToCookie(patient.UserID.ToString());
-        PatientMenu.Show(patient);
-
     }
+
 
     static void PatientSelfSignup(IPatientService patientService)
     {
