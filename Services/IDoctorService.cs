@@ -5,6 +5,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
 {
     public interface IDoctorService
     {
+
+        void AssignToClinic(int doctorId, int clinicId, int departmentId);
+        IEnumerable<PatientRecord> GetDoctorPatientRecords(int doctorId);
+        void AddOrUpdatePatientRecord(int doctorId, PatientRecord record);
+
         void AddDoctor(DoctorInput input);
         bool EmailExists(string email);
         IEnumerable<Doctor> GetAllDoctors();

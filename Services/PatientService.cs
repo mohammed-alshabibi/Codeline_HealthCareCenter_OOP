@@ -54,23 +54,23 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 p.PhoneNumber = phone;
         }
 
-
-        public PatienoutputDTO GetPatientData(string? name, int? Pid)
+        public PatienoutputDTO AuthenticatePatient(PatientInputDTO dto)
         {
-            var p = Pid != null
-                ? GetPatientById(Pid.Value)
-                : GetPatientByName(name);
+            var patient = _patients.FirstOrDefault(p =>
+                p.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase) &&
+                p.Password == dto.Password);
 
-            if (p == null) return null;
+            if (patient == null)
+                return null;
 
             return new PatienoutputDTO
             {
-                FullName = p.FullName,
-                Email = p.Email,
-                PhoneNumber = p.PhoneNumber,
-                Gender = p.Gender,
-                Age = p.Age,
-                NationalID = p.NationalID
+                FullName = patient.FullName,
+                Email = patient.Email,
+                PhoneNumber = patient.PhoneNumber,
+                Gender = patient.Gender,
+                Age = patient.Age,
+                NationalID = patient.NationalID
             };
         }
     }
