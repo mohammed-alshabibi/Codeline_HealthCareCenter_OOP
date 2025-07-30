@@ -82,11 +82,22 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         break;
             
                     case "4":
-                        branchService.AddBranchFromInput();
+                        BranchDTO branchDto = new BranchDTO
+                        {
+                            BranchName = Ask("Enter Branch Name"),
+                            Location = Ask("Enter Branch Location")
+                        };
+
+                        branchService.AddBranch(branchDto); 
                         Pause();
                         break;
                     case "5":
-                        departmentService.AddDepartment();
+                        DepartmentDTO departmentDto = new DepartmentDTO
+                        {
+                            DepartmentId = int.Parse(Ask("Enter Department ID")),
+                            DepartmentName = Ask("Enter Department Name")
+                        };
+                        departmentService.CreateDepartment(departmentDto);
                         Pause();
                         break;
                     case "6":

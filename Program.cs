@@ -19,7 +19,7 @@ namespace Codeline_HealthCareCenter_OOP
             IPatientRecordService patientRecordService = new PatientRecordService();
             IBranchService branchService = new BranchService();
             IBranchDepartmentService branchDepartmentService = new BranchDepartmentService();
-            IPatientService patientService = new PatientService(bookingService, patientRecordService);
+            IPatientService patientService = new PatientService(bookingService, patientRecordService, authService);
             IDoctorService doctorService = new DoctorService();
 
 

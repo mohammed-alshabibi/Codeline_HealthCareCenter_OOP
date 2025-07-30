@@ -14,12 +14,14 @@ namespace Codeline_HealthCareCenter_OOP.Services
         private List<Patient> _patients;
         private readonly IBookingService _bookingService;
         private readonly IPatientRecordService _recordService;
+        private readonly IAuthService _authService;
 
-        public PatientService(IBookingService bookingService, IPatientRecordService recordService)
+        public PatientService(IBookingService bookingService, IPatientRecordService recordService, IAuthService authService)
         {
             _bookingService = bookingService;
             _recordService = recordService;
             _patients = PatientDataHelper.Load();
+            _authService = authService;
         }
 
         public void SaveToFile()
@@ -77,7 +79,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _patients.Add(newPatient);
             SaveToFile();
 
-            Console.WriteLine("✅ Patient added successfully.");
+            Console.WriteLine(" Patient added successfully.");
         }
 
         public IEnumerable<BookingInputDTO> GetAvailableAppointments(int clinicId, int departmentId)
@@ -100,16 +102,16 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
             if (patient != null)
             {
-                Console.WriteLine($"✅ Welcome, {patient.FullName}!");
+                Console.WriteLine($" Welcome, {patient.FullName}!");
                 await authService.SaveTokenToCookie("patient_login");
 
                 //  Use instance-based PatientMenu
-                var patientMenu = new PatientMenu(this, _bookingService, _recordService);
+                var patientMenu = new PatientMenu(this, _bookingService, _recordService, _authService);
                 patientMenu.Show(patient);
             }
             else
             {
-                Console.WriteLine("❌ Invalid Patient credentials.");
+                Console.WriteLine(" Invalid Patient credentials.");
                 await authService.SaveTokenToCookie("unauthorized");
             }
         }
