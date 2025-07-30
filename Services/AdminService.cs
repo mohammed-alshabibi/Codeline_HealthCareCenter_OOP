@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             _admins = AdminDataHelper.Load();
         }
-        public UserOutputDTO? Login(string email, string password)
+        public UserOutputDTO? LoginUserOutputDTO(string email, string password)
         {
             var admin = _admins.FirstOrDefault(a =>
                 a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
@@ -74,7 +74,14 @@ namespace Codeline_HealthCareCenter_OOP.Services
             string email = Ask("Email");
             string password = Ask("Password");
 
-            var admin = userService.AuthenticateUser(email, password);
+            var loginDto = new UserInputDTO
+            {
+                Email = email,
+                Password = password
+            };
+
+            var admin = userService.AuthenticateUser(loginDto);
+
 
             if (admin != null && admin.Role == "Admin")
             {

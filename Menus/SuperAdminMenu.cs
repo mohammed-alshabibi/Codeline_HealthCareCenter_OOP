@@ -153,7 +153,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.Write("Password: ");
             input.Password = Console.ReadLine();
 
-            var result = adminService.Login(input);
+            var result = adminService.Login(input.Email, input.Password);
 
             if (result != null)
             {

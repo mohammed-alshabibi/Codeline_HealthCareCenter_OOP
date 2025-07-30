@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Codeline_HealthCareCenter_OOP.Services;
+using Codeline_HealthCareCenter_OOP.DTO_s;
+
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -33,5 +35,19 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
             return Task.CompletedTask;
         }
+
+        public Task<UserInputDTO> Login(string email, string password)
+        {
+            var users = new List<UserInputDTO>
+    {
+        new UserInputDTO { Email = "admin@example.com", Password = "admin123", Role = "admin" },
+        new UserInputDTO { Email = "doctor@example.com", Password = "doc123", Role = "doctor" },
+        new UserInputDTO { Email = "patient@example.com", Password = "patient123", Role = "patient" }
+    };
+
+            var user = users.FirstOrDefault(u => u.Email == email && u.Password == password);
+            return Task.FromResult(user);
+        }
+
     }
 }

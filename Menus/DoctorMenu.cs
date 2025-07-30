@@ -12,7 +12,8 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
         private readonly int _doctorId;
 
-        public DoctorMenu(int doctorId, IDoctorService doctorService, IPatientRecordService recordService, IBookingService bookingService)
+        public DoctorMenu(int doctorId,IDoctorService doctorService, IPatientRecordService recordService, IBookingService bookingService, IClinicService clinicService)
+
         {
             _doctorId = doctorId;
             _doctorService = doctorService;

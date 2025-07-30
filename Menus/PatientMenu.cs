@@ -1,18 +1,26 @@
 ﻿using System;
+using System.Linq;
 using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Implementations;
 using Codeline_HealthCareCenter_OOP.Services;
 
 namespace Codeline_HealthCareCenter_OOP.Menus
 {
-    public static class PatientMenu
+    public class PatientMenu
     {
-        public static void Show(PatienoutputDTO patient)
-        {
-            PatientService patientService = new PatientService();
-            BookingService bookingService = new BookingService();
-            PatientRecordService recordService = new PatientRecordService();
+        private readonly IPatientService _patientService;
+        private readonly IBookingService _bookingService;
+        private readonly IPatientRecordService _recordService;
 
+        public PatientMenu(IPatientService patientService, IBookingService bookingService, IPatientRecordService recordService)
+        {
+            _patientService = patientService;
+            _bookingService = bookingService;
+            _recordService = recordService;
+        }
+
+        public void Show(PatienoutputDTO patient)
+        {
             while (true)
             {
                 Console.Clear();
@@ -30,32 +38,32 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 switch (mainChoice)
                 {
                     case "1":
-                        PatientSelfSignup(patientService);
-                        Pause();
+                        this.PatientSelfSignup();
+                        this.Pause();
                         break;
 
                     case "2":
                         var dto = new PatientInputDTO
                         {
-                            Email = Ask("Email"),
-                            Password = Ask("Password")
+                            Email = this.Ask("Email"),
+                            Password = this.Ask("Password")
                         };
 
-                        var loggedIn = patientService.AuthenticatePatient(dto);
+                        var loggedIn = _patientService.AuthenticatePatient(dto);
                         if (loggedIn != null)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"\n Welcome {loggedIn.FullName}");
                             Console.ResetColor();
-                            Pause();
-                            ShowPatientMenu(loggedIn, bookingService, recordService);
+                            this.Pause();
+                            this.ShowPatientMenu(loggedIn);
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(" Invalid login.");
                             Console.ResetColor();
-                            Pause();
+                            this.Pause();
                         }
                         break;
 
@@ -65,13 +73,13 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
                     default:
                         Console.WriteLine(" Invalid option.");
-                        Pause();
+                        this.Pause();
                         break;
                 }
             }
         }
 
-        private static void ShowPatientMenu(PatienoutputDTO patient, BookingService bookingService, PatientRecordService recordService)
+        private void ShowPatientMenu(PatienoutputDTO patient)
         {
             while (true)
             {
@@ -92,19 +100,18 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 {
                     case "1":
                         Console.Clear();
-                        var records = recordService.GetRecordsByPatientName(patient.FullName);
+                        var records = _recordService.GetRecordsByPatientName(patient.FullName);
                         Console.WriteLine(" Medical Records:");
                         foreach (var r in records)
                         {
                             Console.WriteLine($" {r.VisitDate:yyyy-MM-dd} | Diagnosis: {r.Diagnosis} | Treatment: {r.Treatment}");
                         }
-                        Pause();
+                        this.Pause();
                         break;
 
                     case "2":
-
                         Console.Clear();
-                        ViewAvailableBookings();
+                        this.ViewAvailableBookings();
                         Console.WriteLine(" Book Appointment");
 
                         Console.Write("Clinic ID: ");
@@ -132,20 +139,20 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                             AppointmentTime = time
                         };
 
-                        bookingService.BookAppointment(booking, patient.PatientId);
+                        _bookingService.BookAppointment(booking, patient.PatientId);
                         Console.WriteLine(" Appointment booked.");
-                        Pause();
+                        this.Pause();
                         break;
 
                     case "3":
                         Console.Clear();
-                        var appts = bookingService.GetBookedAppointments(patient.PatientId);
+                        var appts = _bookingService.GetBookedAppointments(patient.PatientId);
                         Console.WriteLine(" Your Appointments:");
                         foreach (var a in appts)
                         {
                             Console.WriteLine($" {a.AppointmentDate:yyyy-MM-dd} at {a.AppointmentTime} | {a.ClinicName} with {a.DoctorName}");
                         }
-                        Pause();
+                        this.Pause();
                         break;
 
                     case "4":
@@ -154,45 +161,45 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
                     default:
                         Console.WriteLine(" Invalid option.");
-                        Pause();
+                        this.Pause();
                         break;
                 }
             }
         }
 
-        private static void PatientSelfSignup(PatientService patientService)
+        private void PatientSelfSignup()
         {
             Console.Clear();
             Console.WriteLine(" Patient Signup");
 
             var input = new PatientInputDTO
             {
-                FullName = Ask("Full Name"),
-                Email = Ask("Email"),
-                Password = Ask("Password"),
-                PhoneNumber = Ask("Phone Number"),
-                Gender = Ask("Gender"),
-                Age = int.Parse(Ask("Age")),
-                NationalID = Ask("National ID")
+                FullName = this.Ask("Full Name"),
+                Email = this.Ask("Email"),
+                Password = this.Ask("Password"),
+                PhoneNumber = this.Ask("Phone Number"),
+                Gender = this.Ask("Gender"),
+                Age = int.Parse(this.Ask("Age")),
+                NationalID = this.Ask("National ID")
             };
 
-            patientService.AddPatient(input);
+            _patientService.AddPatient(input);
             Console.WriteLine(" Signup successful.");
         }
 
-        private static string Ask(string label)
+        private string Ask(string label)
         {
             Console.Write($"{label}: ");
             return Console.ReadLine();
         }
 
-        private static void Pause()
+        private void Pause()
         {
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
 
-        private static void ViewAvailableBookings()
+        private void ViewAvailableBookings()
         {
             Console.Clear();
             Console.WriteLine("=== View Available Bookings ===");
@@ -203,10 +210,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.Write("Enter Department ID: ");
             int departmentId = int.Parse(Console.ReadLine());
 
-            // Create an instance of BookingService
-            BookingService bookingService = new BookingService();
-
-            var availableSlots = bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
+            var availableSlots = _bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
 
             if (!availableSlots.Any())
             {
@@ -224,8 +228,8 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             }
 
             Console.ResetColor();
-            Pause();
+            this.Pause();
         }
-
     }
 }
+
