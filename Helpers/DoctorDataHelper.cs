@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             {
                 foreach (var d in doctors)
                 {
-                    writer.WriteLine($"{d.FullName},{d.Email},{d.Password},{d.Specialization},{d.PhoneNumber},{d.Gender},{d.YearsOfExperience},{d.Salary},{d.Availability}");
+                    writer.WriteLine($"{d.FullName},{d.Email},{d.Password},{d.Specialization},{d.PhoneNumber},{d.Gender},{d.YearsOfExperience},{d.Salary},{d.Availability},{d.DoctorID}");
                 }
             }
         }
@@ -42,7 +42,8 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
                         parts[5],                        // Gender
                         int.Parse(parts[6]),             // Years of Experience
                         double.Parse(parts[7]),          // Salary
-                        parts[8]                         // Availability
+                        parts[8],                         // Availability
+                        parts[9]                          // DoctorID (assuming this is the 9th part)
                     ));
                 }
             }

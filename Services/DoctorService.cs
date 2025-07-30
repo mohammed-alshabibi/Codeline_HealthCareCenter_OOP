@@ -25,7 +25,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public void AddDoctor(DoctorInput input)
         {
-            var doctor = new Doctor(
+            var doctor = new Doctor
+                (
                 input.FullName,
                 input.Email,
                 input.Password,
@@ -34,7 +35,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 input.Gender,
                 input.YearsOfExperience,
                 input.Salary,
-                input.Availability
+                input.Availability,
+                input.DoctorID
             );
 
             _doctors.Add(doctor);

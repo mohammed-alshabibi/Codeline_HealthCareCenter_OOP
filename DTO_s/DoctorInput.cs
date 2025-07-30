@@ -8,6 +8,7 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
     public class DoctorInput
     {
+        public string DoctorID { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

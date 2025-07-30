@@ -8,6 +8,7 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
     public class DoctorOutPutDTO
     {
+        public string DoctorID { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Specialization { get; set; }

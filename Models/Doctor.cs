@@ -13,7 +13,7 @@ public class Doctor : User
     private double salary;
     private string availability;
 
-    // ✅ Add these two properties
+    //  Add these two properties
     public int ClinicId { get; set; }
     public int DepartmentId { get; set; }
 
@@ -59,7 +59,7 @@ public class Doctor : User
     }
 
     public Doctor(string fullName, string email, string password, string specialization, string phoneNumber,
-                  string gender, int experience, double salary, string availability)
+                  string gender, int experience, double salary, string availability, string DoctorID)
         : base(fullName, email, password, "Doctor")
     {
         DoctorID = $"DOC{UserID:D4}";
@@ -70,7 +70,7 @@ public class Doctor : User
         Salary = salary;
         Availability = availability;
 
-        // ✅ Initialize the new properties
+        //  Initialize the new properties
         ClinicId = 0;
         DepartmentId = 0;
     }

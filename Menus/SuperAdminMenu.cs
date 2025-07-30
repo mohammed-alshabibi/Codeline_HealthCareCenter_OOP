@@ -75,11 +75,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                             Gender = Ask("Gender:"),
                             YearsOfExperience = int.Parse(Ask("Years of Experience:")),
                             Salary = double.Parse(Ask("Salary:")),
-                            Availability = Ask("Availability (e.g., Available/Busy):")
+                            Availability = Ask("Availability (e.g., Available/Busy):"),
+                            DoctorID = Ask("Doctor ID:")
                         };
 
                         doctorService.AddDoctor(doctorInput);
-
                         Pause();
                         break;
             
