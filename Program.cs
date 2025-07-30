@@ -54,6 +54,7 @@ namespace Codeline_HealthCareCenter_OOP
                                 branchService,
                                 branchDepartmentService,
                                 userService,
+                                patientService,
                                 authService
                             );
                             adminMenu.Run();

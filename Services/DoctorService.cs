@@ -38,6 +38,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             );
 
             _doctors.Add(doctor);
+            DoctorDataHelper.Save(_doctors);
             Console.WriteLine(" Doctor added Successfully.");
         }
 
@@ -48,7 +49,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         public Doctor DoctorLogin()
         {
             Console.Clear();
-            Console.WriteLine("🔐 Doctor Login");
+            Console.WriteLine(" Doctor Login");
 
             Console.Write("Email: ");
             string email = Console.ReadLine();

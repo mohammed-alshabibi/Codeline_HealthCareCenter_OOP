@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             {
                 foreach (var p in patients)
                 {
-                    writer.WriteLine($"{p.FullName},{p.Email},{p.Password},{p.PhoneNumber},{p.Gender},{p.Age},{p.NationalID}");
+                    writer.WriteLine($"{p.FullName},{p.Email},{p.Password},{p.PhoneNumber},{p.Gender},{p.Age},{p.NationalID},{p.Id_Patient}");
                 }
             }
         }
@@ -31,7 +31,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             foreach (var line in File.ReadAllLines(_filePath))
             {
                 var parts = line.Split(',');
-                if (parts.Length == 7)
+                if (parts.Length == 8)
                 {
                     patients.Add(new Patient(
                         parts[0], // FullName
@@ -40,7 +40,8 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
                         parts[3], // PhoneNumber
                         parts[4], // Gender
                         int.Parse(parts[5]), // Age
-                        parts[6]  // NationalID
+                        parts[6], // NationalID
+                        int.Parse(parts[7]) // Id_Patient
                     ));
                 }
             }

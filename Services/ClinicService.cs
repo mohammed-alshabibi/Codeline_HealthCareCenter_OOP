@@ -2,6 +2,7 @@
 using System.Linq;
 using Codeline_HealthCareCenter_OOP.Models;
 using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -10,6 +11,15 @@ namespace Codeline_HealthCareCenter_OOP.Services
     {
         private List<Clinic> clinics = new List<Clinic>();
         private int clinicCounter = 1;
+
+        public ClinicService()
+        {
+            clinics = ClinicFileHelper.Load();
+            if (clinics.Count > 0)
+            {
+                clinicCounter = clinics.Max(c => c.ClinicId) + 1; // Start from the next ID
+            }
+        }
 
         public void AddClinic(ClinicInputDTO input)
         {
@@ -21,6 +31,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Location = input.Location
             };
             clinics.Add(clinic);
+            ClinicFileHelper.Save(clinics);
+            Console.WriteLine("Clinc Added...");
         }
         /// Updates an existing clinic based on the clinicId
         public void UpdateClinic(int clinicId, ClinicInputDTO input)

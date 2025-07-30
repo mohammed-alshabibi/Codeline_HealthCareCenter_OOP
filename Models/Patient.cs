@@ -12,6 +12,8 @@ namespace Codeline_HealthCareCenter_OOP.Models
         private string _gender;
         private int _age;
         private string _nationalId;
+        private static int _patientCounter = 1;
+        private static int _idPatient;
 
         public string PhoneNumber
         {
@@ -36,14 +38,20 @@ namespace Codeline_HealthCareCenter_OOP.Models
             get => _nationalId;
             internal set => _nationalId = value;
         }
+        public int Id_Patient
+        {
+            get => _idPatient;
+            private set => _idPatient = value > 0 ? value : _patientCounter++;
+        }
 
-        public Patient(string fullName, string email, string password, string phoneNumber, string gender, int age, string nationalId)
+        public Patient(string fullName, string email, string password, string phoneNumber, string gender, int age, string nationalId, int Id_Patient)
             : base(fullName, email, password, "Patient")
         {
             PhoneNumber = phoneNumber;
             Gender = gender;
             Age = age;
             NationalID = nationalId;
+            Id_Patient = Id_Patient > 0 ? Id_Patient : _patientCounter++;
         }
 
         public override void DisplayInfo()

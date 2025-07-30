@@ -73,12 +73,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 input.PhoneNumber,
                 input.Gender,
                 input.Age,
-                input.NationalID
+                input.NationalID,
+                _patients.Count > 0 ? _patients.Max(p => p.UserID) + 1 : 1 // Auto-increment ID
             );
 
             _patients.Add(newPatient);
-            SaveToFile();
-
+            PatientDataHelper.Save(_patients);
             Console.WriteLine(" Patient added successfully.");
         }
 
@@ -116,7 +116,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
-        // 🔐 Helper method for asking input
+        //  Helper method for asking input
         private static string Ask(string label)
         {
             Console.Write($"{label}: ");

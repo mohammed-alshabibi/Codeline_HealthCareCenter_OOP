@@ -143,14 +143,14 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                             AppointmentTime = time
                         };
 
-                        _bookingService.BookAppointment(booking, patient.PatientId);
+                        _bookingService.BookAppointment(booking, patient.Id_Patient);
                         Console.WriteLine(" Appointment booked.");
                         this.Pause();
                         break;
 
                     case "3":
                         Console.Clear();
-                        var appts = _bookingService.GetBookedAppointments(patient.PatientId);
+                        var appts = _bookingService.GetBookedAppointments(patient.Id_Patient);
                         Console.WriteLine(" Your Appointments:");
                         foreach (var a in appts)
                         {
@@ -172,13 +172,14 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             }
         }
 
-        private void PatientSelfSignup()
+        public void PatientSelfSignup()
         {
             Console.Clear();
             Console.WriteLine(" Patient Signup");
 
             var input = new PatientInputDTO
             {
+                Id_Patient = int.Parse(Ask("ID")),
                 FullName = this.Ask("Full Name"),
                 Email = this.Ask("Email"),
                 Password = this.Ask("Password"),
@@ -220,12 +221,12 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             if (!availableSlots.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ No available appointment slots found.");
+                Console.WriteLine(" No available appointment slots found.");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n✅ Available Appointment Slots:");
+                Console.WriteLine("\n Available Appointment Slots:");
                 foreach (var slot in availableSlots)
                 {
                     Console.WriteLine($"- {slot.AppointmentDate:yyyy-MM-dd} at {slot.AppointmentTime}");

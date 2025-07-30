@@ -31,6 +31,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
             _branches.Add(newBranch);
             BranchFileHelper.SaveBranches(_branches);
+            Console.WriteLine("Branch created successfully.");
         }
         public IEnumerable<Branch> GetAllBranches()
         {

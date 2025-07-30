@@ -18,6 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             DepartmentService departmentService = new DepartmentService();
             DoctorService doctorService = new DoctorService();
             BranchDepartmentService branchDepartmentService = new BranchDepartmentService();
+            ClinicService clinicService = new ClinicService();
             AuthService _auth = new AuthService();
 
             while (true)
@@ -78,12 +79,14 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         };
 
                         doctorService.AddDoctor(doctorInput);
+
                         Pause();
                         break;
             
                     case "4":
                         BranchDTO branchDto = new BranchDTO
                         {
+                            BranchId = int.Parse(Ask("Enter Branch ID")),
                             BranchName = Ask("Enter Branch Name"),
                             Location = Ask("Enter Branch Location")
                         };

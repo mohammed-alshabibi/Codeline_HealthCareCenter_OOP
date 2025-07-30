@@ -2,6 +2,7 @@
 using Codeline_HealthCareCenter_OOP.Helpers;
 using Codeline_HealthCareCenter_OOP.Services;
 using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Menus;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -14,6 +15,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         private readonly IBranchDepartmentService _branchDepartmentService;
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
+        private readonly IPatientService _patientService;
 
         public AdminMenu(
             IBookingService bookingService,
@@ -22,6 +24,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             IBranchService branchService,
             IBranchDepartmentService branchDepartmentService,
             IUserService userService,
+            IPatientService patientService,
             IAuthService authService)
 
         {
@@ -32,6 +35,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _branchDepartmentService = branchDepartmentService;
             _userService = userService;
             _authService = authService;
+            _patientService = patientService;
             Console.Title = "Codeline HealthCare Center - Admin Menu";
             Console.ForegroundColor = ConsoleColor.Cyan;
         }
@@ -71,7 +75,23 @@ namespace Codeline_HealthCareCenter_OOP.Services
                         ManageAdmins();
                         break;
                     case "6":
-                        AddPatient();
+                        Console.Clear();
+                        Console.WriteLine(" Patient Signup");
+
+                        var patient = new PatientInputDTO
+                        {
+                            Id_Patient = int.Parse(Ask("ID")),
+                            FullName = Ask("Full Name"),
+                            Email = Ask("Email"),
+                            Password = Ask("Password"),
+                            PhoneNumber = Ask("Phone Number"),
+                            Gender = Ask("Gender"),
+                            Age = int.Parse(Ask("Age")),
+                            NationalID = Ask("National ID")
+                        };
+                        _patientService.AddPatient(patient);
+                        Console.WriteLine(" Patient added! Press any key...");
+                        Console.ReadKey();
                         break;
                     case "7":
                         _authService.Logout().Wait();
@@ -110,6 +130,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                     Department = dept,
                     Location = loc
                 });
+
 
                 Console.WriteLine(" Clinic added! Press any key...");
                 Console.ReadKey();
@@ -244,27 +265,10 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Console.ReadKey();
             }
         }
-
-        private void AddPatient()
+        private string Ask(string question)
         {
-            Console.Clear();
-            Console.WriteLine("=== Add New Patient ===");
-
-            var input = new UserInputDTO();
-
-            Console.Write("Full Name: ");
-            input.FullName = Console.ReadLine();
-            Console.Write("Email: ");
-            input.Email = Console.ReadLine();
-            Console.Write("Password: ");
-            input.Password = Console.ReadLine();
-            input.Role = "Patient";
-
-            _userService.AddSuperAdmin(input);  
-
-
-            Console.WriteLine(" Patient added successfully! Press any key...");
-            Console.ReadKey();
+            Console.Write(question);
+            return Console.ReadLine();
         }
     }
 }
