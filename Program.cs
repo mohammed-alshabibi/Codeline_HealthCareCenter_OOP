@@ -41,10 +41,7 @@ namespace Codeline_HealthCareCenter_OOP
                 // check if is the user is a super admin
 
            
-                    
-
-
-
+                  
                 if (user != null)
                 {
                     switch (user.Role?.ToLower())
@@ -56,7 +53,8 @@ namespace Codeline_HealthCareCenter_OOP
                                 patientRecordService,
                                 branchService,
                                 branchDepartmentService,
-                                userService
+                                userService,
+                                authService
                             );
                             adminMenu.Run();
                             break;
@@ -70,7 +68,8 @@ namespace Codeline_HealthCareCenter_OOP
                                 doctorService,
                                 patientRecordService,
                                 bookingService,
-                                clinicService
+                                clinicService,
+                                authService
                             );
                             doctorMenu.Run();
                             break;
@@ -79,14 +78,16 @@ namespace Codeline_HealthCareCenter_OOP
                             var patientMenu = new PatientMenu(
                                 patientService,
                                 bookingService,
-                                patientRecordService
+                                patientRecordService,
+                                authService
+
                             );
                             patientMenu.Show(null); // Or pass patient DTO if needed
                             break;
 
 
                         case "superadmin":
-                            Console.WriteLine($"👑 Welcome, Super Admin {user.FullName}!");
+                            Console.WriteLine($" Welcome, Super Admin {user.FullName}!");
                             await authService.SaveTokenToCookie("superadmin_login");
                             SuperAdminMenu.Show();
                             break;
@@ -102,7 +103,7 @@ namespace Codeline_HealthCareCenter_OOP
                     var choice = Console.ReadLine();
                     if (choice?.ToLower() == "y")
                     {
-                        var patientMenu = new PatientMenu(patientService, bookingService, patientRecordService);
+                        var patientMenu = new PatientMenu(patientService, bookingService, patientRecordService, authService);
                         patientMenu.Show(null);
                         // triggers signup flow
                     }

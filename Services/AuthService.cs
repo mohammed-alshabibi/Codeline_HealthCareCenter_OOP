@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Codeline_HealthCareCenter_OOP.Services;
 using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
 
 
 namespace Codeline_HealthCareCenter_OOP.Services
@@ -38,19 +39,60 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public Task<UserInputDTO> Login(string email, string password)
         {
-            var users = new List<UserInputDTO>
-    {
-        new UserInputDTO { Email = "admin@example.com", Password = "admin123", Role = "admin" },
-        new UserInputDTO { Email = "doctor@example.com", Password = "doc123", Role = "doctor" },
-        new UserInputDTO { Email = "patient@example.com", Password = "patient123", Role = "patient" },
-        new UserInputDTO { Email = "superadmin@example.com", Password = "superadmin123", Role = "superadmin" }
+                // 1. Default SuperAdmin
+                if (email.Equals("SA", StringComparison.OrdinalIgnoreCase) && password == "123")
+                {
+                    return Task.FromResult(new UserInputDTO
+                    {
+                        Email = email,
+                        Password = password,
+                        Role = "superadmin"
+                    });
+                }
 
+                // 2. Load from files
+                var admins = AdminDataHelper.Load();
+                var doctors = DoctorDataHelper.Load();
+                var patients = PatientDataHelper.Load();
 
-    };
+                // 3. Try to find a match in admins
+                var admin = admins.FirstOrDefault(a => a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && a.Password == password);
+                if (admin != null)
+                {
+                    return Task.FromResult(new UserInputDTO
+                    {
+                        Email = admin.Email,
+                        Password = admin.Password,
+                        Role = "admin"
+                    });
+                }
 
-            var user = users.FirstOrDefault(u => u.Email == email && u.Password == password);
-            return Task.FromResult(user);
+                // 4. Try to find a match in doctors
+                var doctor = doctors.FirstOrDefault(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && d.Password == password);
+                if (doctor != null)
+                {
+                    return Task.FromResult(new UserInputDTO
+                    {
+                        Email = doctor.Email,
+                        Password = doctor.Password,
+                        Role = "doctor"
+                    });
+                }
+
+                // 5. Try to find a match in patients
+                var patient = patients.FirstOrDefault(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && p.Password == password);
+                if (patient != null)
+                {
+                    return Task.FromResult(new UserInputDTO
+                    {
+                        Email = patient.Email,
+                        Password = patient.Password,
+                        Role = "patient"
+                    });
+                }
+
+                // 6. No match found
+                return Task.FromResult<UserInputDTO>(null);
         }
-
     }
 }

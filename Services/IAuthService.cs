@@ -8,6 +8,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         Task SaveTokenToCookie(string token);
         Task<int> GetUserIdFromToken();
         Task<UserInputDTO> Login(string email, string password);
+        Task Logout();
 
     }
 }

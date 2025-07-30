@@ -9,16 +9,18 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         private readonly IDoctorService _doctorService;
         private readonly IPatientRecordService _recordService;
         private readonly IBookingService _bookingService;
+        private readonly IAuthService _authService;
 
         private readonly int _doctorId;
 
-        public DoctorMenu(int doctorId,IDoctorService doctorService, IPatientRecordService recordService, IBookingService bookingService, IClinicService clinicService)
+        public DoctorMenu(int doctorId,IDoctorService doctorService, IPatientRecordService recordService, IBookingService bookingService, IClinicService clinicService, IAuthService authService)
 
         {
             _doctorId = doctorId;
             _doctorService = doctorService;
             _recordService = recordService;
             _bookingService = bookingService;
+            _authService = authService;
         }
 
         public void Run()
@@ -31,7 +33,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.WriteLine("2. View Patient Records");
                 Console.WriteLine("3. Add/Edit Patient Record");
                 Console.WriteLine("4. Create Appointment");
-                Console.WriteLine("5. Back");
+                Console.WriteLine("5. Logout");
                 Console.Write("Choose an option: ");
 
                 switch (Console.ReadLine())
@@ -40,7 +42,10 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "2": ViewRecords(); break;
                     case "3": AddOrEditRecord(); break;
                     case "4": CreateAppointment(); break;
-                    case "5": return;
+                    case "5":
+                        _authService.Logout();
+                        Console.WriteLine(" Logged out successfully! Press any key to return to login...");
+                        return;
                     default:
                         Console.WriteLine("Invalid option. Press any key...");
                         Console.ReadKey();
@@ -57,7 +62,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             int deptId = int.Parse(Console.ReadLine());
 
             _doctorService.AssignToClinic(_doctorId, clinicId, deptId);
-            Console.WriteLine("✅ Assigned successfully! Press any key...");
+            Console.WriteLine(" Assigned successfully! Press any key...");
             Console.ReadKey();
         }
 
@@ -105,7 +110,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             else
                 _recordService.UpdateRecord(recordId, input);
 
-            Console.WriteLine("✅ Record saved! Press any key...");
+            Console.WriteLine(" Record saved! Press any key...");
             Console.ReadKey();
         }
 
@@ -129,7 +134,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
             _bookingService.BookAppointment(input, patientId);
 
-            Console.WriteLine("✅ Appointment created! Press any key...");
+            Console.WriteLine("Appointment created! Press any key...");
             Console.ReadKey();
         }
     }

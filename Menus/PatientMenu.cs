@@ -11,12 +11,14 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         private readonly IPatientService _patientService;
         private readonly IBookingService _bookingService;
         private readonly IPatientRecordService _recordService;
+        private readonly IAuthService _authService;
 
-        public PatientMenu(IPatientService patientService, IBookingService bookingService, IPatientRecordService recordService)
+        public PatientMenu(IPatientService patientService, IBookingService bookingService, IPatientRecordService recordService, IAuthService authService)
         {
             _patientService = patientService;
             _bookingService = bookingService;
             _recordService = recordService;
+            _authService = authService;
         }
 
         public void Show(PatienoutputDTO patient)
@@ -56,7 +58,8 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                             Console.WriteLine($"\n Welcome {loggedIn.FullName}");
                             Console.ResetColor();
                             this.Pause();
-                            this.ShowPatientMenu(loggedIn);
+
+                            this.ShowPatientMenu(loggedIn); //  fixed
                         }
                         else
                         {
@@ -81,6 +84,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
         private void ShowPatientMenu(PatienoutputDTO patient)
         {
+
             while (true)
             {
                 Console.Clear();
@@ -156,6 +160,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         break;
 
                     case "4":
+                        _authService.Logout().Wait();
                         Console.WriteLine(" Logged out...");
                         return;
 

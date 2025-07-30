@@ -13,6 +13,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         private readonly IBranchService _branchService;
         private readonly IBranchDepartmentService _branchDepartmentService;
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
         public AdminMenu(
             IBookingService bookingService,
@@ -20,7 +21,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
             IPatientRecordService patientRecordService,
             IBranchService branchService,
             IBranchDepartmentService branchDepartmentService,
-            IUserService userService)
+            IUserService userService,
+            IAuthService authService)
+
         {
             _bookingService = bookingService;
             _clinicService = clinicService;
@@ -28,6 +31,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _branchService = branchService;
             _branchDepartmentService = branchDepartmentService;
             _userService = userService;
+            _authService = authService;
+            Console.Title = "Codeline HealthCare Center - Admin Menu";
+            Console.ForegroundColor = ConsoleColor.Cyan;
         }
 
         public void Run()
@@ -42,7 +48,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Console.WriteLine("4. Manage Branches & Departments");
                 Console.WriteLine("5. Manage Admin Users");
                 Console.WriteLine("6. Add Patient");
-                Console.WriteLine("0. Exit");
+                Console.WriteLine("7. Logout");
 
                 Console.Write("\nSelect Option: ");
                 var input = Console.ReadLine();
@@ -67,8 +73,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
                     case "6":
                         AddPatient();
                         break;
-                    case "0":
-                        Console.WriteLine("Exiting system...");
+                    case "7":
+                        _authService.Logout().Wait();
+                        Console.WriteLine("Logout...");
                         return;
                     default:
                         Console.WriteLine("Invalid choice. Press any key...");
@@ -104,7 +111,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                     Location = loc
                 });
 
-                Console.WriteLine("✅ Clinic added! Press any key...");
+                Console.WriteLine(" Clinic added! Press any key...");
                 Console.ReadKey();
             }
         }
@@ -138,7 +145,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
                 _bookingService.BookAppointment(input, patientId);
 
-                Console.WriteLine("✅ Booking created! Press any key...");
+                Console.WriteLine(" Booking created! Press any key...");
                 Console.ReadKey();
             }
         }
@@ -169,7 +176,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
                 _patientRecordService.AddRecord(input);
 
-                Console.WriteLine("✅ Record added! Press any key...");
+                Console.WriteLine(" Record added! Press any key...");
                 Console.ReadKey();
             }
         }
@@ -182,7 +189,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             var branches = _branchService.GetAllBranches();
             foreach (var branch in branches)
             {
-                Console.WriteLine($"🏢 Branch: {branch.BranchName} | Location: {branch.Location}");
+                Console.WriteLine($" Branch: {branch.BranchName} | Location: {branch.Location}");
             }
 
             Console.WriteLine("\n1. Add Branch");
@@ -201,7 +208,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                     Location = loc
                 });
 
-                Console.WriteLine("✅ Branch created! Press any key...");
+                Console.WriteLine(" Branch created! Press any key...");
                 Console.ReadKey();
             }
         }
@@ -233,7 +240,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
                 _userService.AddSuperAdmin(input);
 
-                Console.WriteLine("✔ Admin added! Press any key...");
+                Console.WriteLine(" Admin added! Press any key...");
                 Console.ReadKey();
             }
         }
@@ -256,7 +263,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             _userService.AddSuperAdmin(input);  
 
 
-            Console.WriteLine("✔ Patient added successfully! Press any key...");
+            Console.WriteLine(" Patient added successfully! Press any key...");
             Console.ReadKey();
         }
     }
