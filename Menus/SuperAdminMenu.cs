@@ -55,12 +55,13 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                             PhoneNumber = Ask("Phone Number:"),
                             Role = "Admin"
                         };
-
+                        Console.WriteLine("admin created");
                         adminService.AddAdmin(adminDto); //  Use DTO-based version
                         Pause();
                         break;
                     case "2":
                         AdminLogin(adminService);
+
                         break;
                     case "3":
                         adminService.ShowAllAdmins();

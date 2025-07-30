@@ -42,7 +42,10 @@ namespace Codeline_HealthCareCenter_OOP.Services
     {
         new UserInputDTO { Email = "admin@example.com", Password = "admin123", Role = "admin" },
         new UserInputDTO { Email = "doctor@example.com", Password = "doc123", Role = "doctor" },
-        new UserInputDTO { Email = "patient@example.com", Password = "patient123", Role = "patient" }
+        new UserInputDTO { Email = "patient@example.com", Password = "patient123", Role = "patient" },
+        new UserInputDTO { Email = "superadmin@example.com", Password = "superadmin123", Role = "superadmin" }
+
+
     };
 
             var user = users.FirstOrDefault(u => u.Email == email && u.Password == password);

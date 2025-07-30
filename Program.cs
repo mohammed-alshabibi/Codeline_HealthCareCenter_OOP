@@ -29,13 +29,21 @@ namespace Codeline_HealthCareCenter_OOP
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("=== Welcome to Codeline HealthCare System ===");
                 Console.ResetColor();
-
+                
                 Console.Write("Enter Email: ");
                 string email = Console.ReadLine();
                 Console.Write("Enter Password: ");
                 string password = Console.ReadLine();
 
                 var user = await authService.Login(email, password); // should return UserInputDTO
+
+
+                // check if is the user is a super admin
+
+           
+                    
+
+
 
                 if (user != null)
                 {
@@ -74,6 +82,13 @@ namespace Codeline_HealthCareCenter_OOP
                                 patientRecordService
                             );
                             patientMenu.Show(null); // Or pass patient DTO if needed
+                            break;
+
+
+                        case "superadmin":
+                            Console.WriteLine($"👑 Welcome, Super Admin {user.FullName}!");
+                            await authService.SaveTokenToCookie("superadmin_login");
+                            SuperAdminMenu.Show();
                             break;
 
                         default:
