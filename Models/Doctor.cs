@@ -17,7 +17,7 @@ public class Doctor : User
     public int ClinicId { get; set; }
     public int DepartmentId { get; set; }
 
-    public string DoctorID
+    public string doctorID
     {
         get => doctorId;
         private set => doctorId = value;
@@ -60,9 +60,9 @@ public class Doctor : User
 
     public Doctor(string fullName, string email, string password, string specialization, string phoneNumber,
                   string gender, int experience, double salary, string availability, string DoctorID)
-        : base(fullName, email, password, "Doctor")
+        : base(fullName, email, password, "doctor")
     {
-        DoctorID = $"DOC{UserID:D4}";
+        doctorID = DoctorID;
         Specialization = specialization;
         PhoneNumber = phoneNumber;
         Gender = gender;
@@ -78,7 +78,7 @@ public class Doctor : User
     public override void DisplayInfo()
     {
         base.DisplayInfo();
-        Console.WriteLine($"[DoctorID: {DoctorID}] | {Specialization} | Exp: {YearsOfExperience} yrs | Phone: {PhoneNumber}");
+        Console.WriteLine($"[DoctorID: {doctorID}] | {Specialization} | Exp: {YearsOfExperience} yrs | Phone: {PhoneNumber}");
     }
 }
 

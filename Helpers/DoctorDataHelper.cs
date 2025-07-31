@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             {
                 foreach (var d in doctors)
                 {
-                    writer.WriteLine($"{d.FullName},{d.Email},{d.Password},{d.Specialization},{d.PhoneNumber},{d.Gender},{d.YearsOfExperience},{d.Salary},{d.Availability},{d.DoctorID}");
+                    writer.WriteLine($"{d.FullName},{d.Email},{d.Password},{d.Specialization},{d.PhoneNumber},{d.Gender},{d.YearsOfExperience},{d.Salary},{d.Availability},{d.doctorID}");
                 }
             }
         }
@@ -31,7 +31,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             foreach (var line in File.ReadAllLines(_filePath))
             {
                 var parts = line.Split(',');
-                if (parts.Length == 9)
+                if (parts.Length == 10)
                 {
                     doctors.Add(new Doctor(
                         parts[0],                        // FullName

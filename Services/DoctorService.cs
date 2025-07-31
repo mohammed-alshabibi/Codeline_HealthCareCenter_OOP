@@ -80,7 +80,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
         }
 
         // You can implement the rest later as needed
-        public Doctor GetDoctorById(int uid) => _doctors.FirstOrDefault(d => d.UserID == uid);
+        public Doctor GetDoctorById(int id) =>
+    _doctors.FirstOrDefault(d => int.TryParse(d.doctorID, out int parsedId) && parsedId == id);
+
 
         public Doctor GetDoctorByEmail(string email) =>
             _doctors.FirstOrDefault(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
@@ -90,7 +92,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public void UpdateDoctor(Doctor doctor)
         {
-            var existing = _doctors.FirstOrDefault(d => d.UserID == doctor.UserID);
+            var existing = _doctors.FirstOrDefault(d => d.doctorID == doctor.doctorID);
             if (existing != null)
             {
                 existing.FullName = doctor.FullName;
@@ -136,7 +138,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public DoctorOutPutDTO GetDoctorDetailsById(int uid)
         {
-            var doc = _doctors.FirstOrDefault(d => d.UserID == uid);
+            var doc = GetDoctorById(uid);
             if (doc == null) return null;
 
             return new DoctorOutPutDTO
@@ -170,7 +172,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public void AssignToClinic(int doctorId, int clinicId, int departmentId)
         {
-            var doc = _doctors.FirstOrDefault(d => d.UserID == doctorId);
+            var doc = GetDoctorById(doctorId);
             if (doc != null)
             {
                 doc.ClinicId = clinicId;

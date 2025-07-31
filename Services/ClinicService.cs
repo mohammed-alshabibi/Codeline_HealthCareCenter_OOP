@@ -52,9 +52,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (clinic != null)
             {
                 clinics.Remove(clinic);
+                ClinicFileHelper.Save(clinics);
                 return true;
             }
             return false;
+
+
         }
         // / Retrieves a clinic by its ID
         public Clinic GetClinicById(int clinicId)

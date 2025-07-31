@@ -176,19 +176,23 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         {
             Console.Clear();
             Console.WriteLine(" Patient Signup");
+            Console.WriteLine(" Please fill in the details below:");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(" Note: All fields are required.");
+            Console.ResetColor();
+            Console.WriteLine("=====================================");
 
             var input = new PatientInputDTO
             {
-                Id_Patient = int.Parse(Ask("ID")),
                 FullName = this.Ask("Full Name"),
                 Email = this.Ask("Email"),
                 Password = this.Ask("Password"),
                 PhoneNumber = this.Ask("Phone Number"),
                 Gender = this.Ask("Gender"),
                 Age = int.Parse(this.Ask("Age")),
-                NationalID = this.Ask("National ID")
+                NationalID = this.Ask("National ID"),
+                Id_Patient = 0 // Assuming ID is auto-generated
             };
-
             _patientService.AddPatient(input);
             Console.WriteLine(" Signup successful.");
         }
