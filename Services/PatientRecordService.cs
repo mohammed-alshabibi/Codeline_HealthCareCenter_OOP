@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Codeline_HealthCareCenter_OOP.Models;
 using Codeline_HealthCareCenter_OOP.DTO_s;
+using Codeline_HealthCareCenter_OOP.Helpers;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -11,6 +12,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
         private List<PatientRecord> records = new List<PatientRecord>();
         private int recordCounter = 1;
 
+        public PatientRecordService()
+        {
+            records = PatientRecordFileHelper.Load(); //  Load from file
+            if (records.Count > 0)
+                recordCounter = records.Max(r => r.RecordId) + 1;
+        }
         public void AddRecord(PatientRecordInputDTO input)
         {
             var record = new PatientRecord
@@ -23,6 +30,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 VisitDate = input.VisitDate
             };
             records.Add(record);
+            PatientRecordFileHelper.Save(records);
+            Console.WriteLine("Record added successfully!");
         }
 
         public void UpdateRecord(int recordId, PatientRecordInputDTO input)
@@ -35,7 +44,10 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 record.Diagnosis = input.Diagnosis;
                 record.Treatment = input.Treatment;
                 record.VisitDate = input.VisitDate;
+                PatientRecordFileHelper.Save(records); //  Save to file
+                Console.WriteLine("Record updated successfully!");
             }
+          
         }
 
         public bool DeleteRecord(int recordId)
@@ -44,6 +56,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (record != null)
             {
                 records.Remove(record);
+                PatientRecordFileHelper.Save(records); //  Save to file
                 return true;
             }
             return false;

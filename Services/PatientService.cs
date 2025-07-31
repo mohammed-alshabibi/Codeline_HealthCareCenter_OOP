@@ -60,12 +60,15 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 PhoneNumber = patient.PhoneNumber,
                 Gender = patient.Gender,
                 Age = patient.Age,
-                NationalID = patient.NationalID
+                NationalID = patient.NationalID,
+                Id_Patient = patient.UserID
             };
         }
 
         public void AddPatient(PatientInputDTO input)
         {
+            int nextId = _patients.Any() ? _patients.Max(p => p.UserID) + 1 : 1;
+
             var newPatient = new Patient(
                 input.FullName,
                 input.Email,
@@ -74,7 +77,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 input.Gender,
                 input.Age,
                 input.NationalID,
-                _patients.Count > 0 ? _patients.Max(p => p.UserID) + 1 : 1 // Auto-increment ID
+                nextId
             );
 
             _patients.Add(newPatient);
@@ -130,6 +133,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
             PatientInputDTO input = new()
             {
+
                 FullName = Ask("Full Name"),
                 Email = Ask("Email"),
                 Password = Ask("Password"),
@@ -140,7 +144,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             };
 
             AddPatient(input);
-            Console.WriteLine("🎉 Patient signed up successfully.");
+            Console.WriteLine(" Patient signed up successfully.");
         }
 
         public void AddPatientFromAdmin()
@@ -159,7 +163,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             };
 
             AddPatient(input);
-            Console.WriteLine("✅ Patient added by admin successfully.");
+            Console.WriteLine("Patient added by admin successfully.");
         }
     }
 }

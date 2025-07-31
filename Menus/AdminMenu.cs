@@ -3,6 +3,7 @@ using Codeline_HealthCareCenter_OOP.Helpers;
 using Codeline_HealthCareCenter_OOP.Services;
 using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Menus;
+using Codeline_HealthCareCenter_OOP.Models;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -80,7 +81,6 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
                         var patient = new PatientInputDTO
                         {
-                            Id_Patient = int.Parse(Ask("ID")),
                             FullName = Ask("Full Name"),
                             Email = Ask("Email"),
                             Password = Ask("Password"),
@@ -173,32 +173,181 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         private void ManagePatientRecords()
         {
-            Console.Clear();
-            Console.WriteLine("=== Manage Patient Records ===");
-
-            _patientRecordService.GetAllRecords();
-
-            Console.WriteLine("\n1. Add Record");
-            Console.WriteLine("2. Back");
-            Console.Write("\n> ");
-            if (Console.ReadLine() == "1")
+            while (true)
             {
-                var input = new PatientRecordInputDTO();
-                Console.Write("Patient ID: ");
-                input.PatientId = int.Parse(Console.ReadLine());
-                Console.Write("Patient Name: ");
-                input.PatientName = Console.ReadLine();
-                Console.Write("Diagnosis: ");
-                input.Diagnosis = Console.ReadLine();
-                Console.Write("Treatment: ");
-                input.Treatment = Console.ReadLine();
-                Console.Write("Visit Date (yyyy-mm-dd): ");
-                input.VisitDate = DateTime.Parse(Console.ReadLine());
+                Console.Clear();
+                Console.WriteLine("=== Manage Patient Records ===");
 
-                _patientRecordService.AddRecord(input);
+                var records = _patientRecordService.GetAllRecords(); // always reload the latest
 
-                Console.WriteLine(" Record added! Press any key...");
-                Console.ReadKey();
+                Console.WriteLine("\n1. View All Records");
+                Console.WriteLine("2. Filter by Patient ID");
+                Console.WriteLine("3. Add Record");
+                Console.WriteLine("4. Back");
+                Console.Write("\n> ");
+                string choice = Console.ReadLine();
+
+                if (choice == "1")
+                {
+                    Console.Clear();
+                    Console.WriteLine("=== All Patient Records ===\n");
+
+                    foreach (var record in records)
+                    {
+                        Console.WriteLine($"#{record.RecordId} | {record.PatientName} | {record.Diagnosis} | {record.VisitDate.ToShortDateString()}");
+                    }
+
+                    Pause();
+                }
+                else if (choice == "2")
+                {
+                    var patients = _patientService.GetAllPatients(); // List<PatientOutputDTO>
+
+                    Console.Write("Enter Patient ID to filter: ");
+                    if (int.TryParse(Console.ReadLine(), out int patientId))
+                    {
+                        var selectedPatient = patients.FirstOrDefault(p => p.PatientID == patientId);
+                        if (selectedPatient == null)
+                        {
+                            Console.WriteLine(" Patient not found.");
+                            Pause();
+                            continue;
+                        }
+
+                        Console.Clear();
+                        Console.WriteLine("=== Patient Info ===");
+                        Console.WriteLine($"ID: {selectedPatient.PatientID}");
+                        Console.WriteLine($"Name: {selectedPatient.FullName}");
+                        Console.WriteLine($"Email: {selectedPatient.Email}");
+                        Console.WriteLine($"Phone: {selectedPatient.PhoneNumber}");
+                        Console.WriteLine($"Gender: {selectedPatient.Gender}");
+                        Console.WriteLine($"Age: {selectedPatient.Age}");
+                        Console.WriteLine($"National ID: {selectedPatient.NationalID}");
+
+                        var filtered = records
+                            .Where(r => r.PatientId == patientId)
+                            .ToList();
+
+                        Console.WriteLine("\n=== Patient Records ===");
+                        if (filtered.Any())
+                        {
+                            foreach (var record in filtered)
+                            {
+                                Console.WriteLine($"#{record.RecordId} | Diagnosis: {record.Diagnosis} | Treatment: {record.Treatment} | Date: {record.VisitDate.ToShortDateString()}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(" No records found for this patient.");
+                        }
+
+                        Pause();
+                    }
+                    else
+                    {
+                        Console.WriteLine(" Invalid input.");
+                        Pause();
+                    }
+                }
+                else if (choice == "3")
+                {
+                    var input = new PatientRecordInputDTO();
+                    Console.Clear();
+                    Console.WriteLine("=== Add Patient Record ===");
+                    Console.WriteLine("Enter the following details:");
+
+                    input.RecordId = records.Any() ? records.Max(r => r.RecordId) + 1 : 1;
+
+                    var patients = _patientService.GetAllPatients();
+                    if (!patients.Any())
+                    {
+                        Console.WriteLine(" No patients found. Please add a patient first.");
+                        Pause();
+                        continue;
+                    }
+
+                    Console.WriteLine("\nAvailable Patients:");
+                    foreach (var p in patients)
+                    {
+                        Console.WriteLine($"ID: {p.PatientID} | Name: {p.FullName}");
+                    }
+
+                    Console.Write("\nEnter Patient ID: ");
+                    input.PatientId = int.Parse(Console.ReadLine());
+
+                    var selected = patients.FirstOrDefault(p => p.PatientID == input.PatientId);
+                    if (selected == null)
+                    {
+                        Console.WriteLine(" Patient not found.");
+                        Pause();
+                        continue;
+                    }
+
+                    input.PatientName = selected.FullName;
+
+                    Console.Write("Diagnosis: ");
+                    input.Diagnosis = Console.ReadLine();
+
+                    Console.Write("Treatment: ");
+                    input.Treatment = Console.ReadLine();
+
+                    Console.Write("Visit Date (yyyy-mm-dd): ");
+                    input.VisitDate = DateTime.Parse(Console.ReadLine());
+
+                    // Validations
+                    if (input.VisitDate > DateTime.Now)
+                    {
+                        Console.WriteLine(" Visit date cannot be in the future.");
+                        Pause();
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(input.PatientName) || string.IsNullOrWhiteSpace(input.Diagnosis))
+                    {
+                        Console.WriteLine(" Patient Name and Diagnosis cannot be empty.");
+                        Pause();
+                        continue;
+                    }
+
+                    // Add the record
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Adding record... Please wait...");
+                    Console.ResetColor();
+
+                    _patientRecordService.AddRecord(input);
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(" Record added successfully!");
+                    Console.ResetColor();
+                    Pause();
+
+                    // Reload and show added record
+                    records = _patientRecordService.GetAllRecords();
+
+                    Console.Clear();
+                    Console.WriteLine("=== New Record Added ===");
+                    Console.WriteLine($"Record ID: {input.RecordId}");
+                    Console.WriteLine($"Patient ID: {input.PatientId}");
+                    Console.WriteLine($"Patient Name: {input.PatientName}");
+                    Console.WriteLine($"Diagnosis: {input.Diagnosis}");
+                    Console.WriteLine($"Treatment: {input.Treatment}");
+                    Console.WriteLine($"Visit Date: {input.VisitDate.ToShortDateString()}");
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\n Record added and saved!");
+                    Console.ResetColor();
+                    Pause();
+                }
+                else if (choice == "4")
+                {
+                    break; // Exit to previous menu
+                }
+                else
+                {
+                    Console.WriteLine(" Invalid option.");
+                    Pause();
+                }
             }
         }
 
@@ -207,7 +356,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
             Console.Clear();
             Console.WriteLine("=== Manage Branches & Departments ===");
 
-            var branches = _branchService.GetAllBranches();
+            var branches = BranchFileHelper.LoadBranches(); // Load latest from file
+
             foreach (var branch in branches)
             {
                 Console.WriteLine($" Branch: {branch.BranchName} | Location: {branch.Location}");
@@ -223,13 +373,21 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Console.Write("Location: ");
                 string loc = Console.ReadLine();
 
-                _branchService.AddBranch(new BranchDTO
-                {
-                    BranchName = name,
-                    Location = loc
-                });
+                int newId = branches.Count > 0 ? branches.Max(b => b.BranchId) + 1 : 1;
 
-                Console.WriteLine(" Branch created! Press any key...");
+                Branch newBranch = new Branch
+                {
+                    BranchId = newId,
+                    BranchName = name,
+                    Location = loc,
+                    IsActive = true
+                };
+
+                branches.Add(newBranch);
+
+                BranchFileHelper.SaveBranches(branches); // Save updated list to file
+
+                Console.WriteLine(" Branch created and saved successfully. Press any key...");
                 Console.ReadKey();
             }
         }
@@ -270,5 +428,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
             Console.Write(question);
             return Console.ReadLine();
         }
+        private void Pause()
+        {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
     }
 }

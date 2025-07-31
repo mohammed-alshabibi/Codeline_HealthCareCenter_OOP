@@ -9,6 +9,7 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
 {
     public class PatientRecordInputDTO // Represents the input data for a patient record
     {
+        public int RecordId { get; set; } // Unique identifier for the patient record
         public int PatientId { get; set; } // Unique identifier for the patient
         public string PatientName { get; set; } // Name of the patient 
         public string Diagnosis { get; set; } // Diagnosis given to the patient

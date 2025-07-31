@@ -19,6 +19,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public void AddBranch(BranchDTO branchDto)
         {
+
             int newId = _branches.Count > 0 ? _branches.Max(b => b.BranchId) + 1 : 1;
 
             Branch newBranch = new Branch

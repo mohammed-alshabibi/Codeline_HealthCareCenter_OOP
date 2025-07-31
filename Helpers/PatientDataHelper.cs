@@ -18,7 +18,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
             {
                 foreach (var p in patients)
                 {
-                    writer.WriteLine($"{p.FullName},{p.Email},{p.Password},{p.PhoneNumber},{p.Gender},{p.Age},{p.NationalID},{p.Id_Patient}");
+                    writer.WriteLine($"{p.FullName},{p.Email},{p.Password},{p.PhoneNumber},{p.Gender},{p.Age},{p.NationalID},{p.PatientID}");
                 }
             }
         }

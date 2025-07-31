@@ -38,7 +38,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
             get => _nationalId;
             internal set => _nationalId = value;
         }
-        public int Id_Patient
+        public int PatientID
         {
             get => _idPatient;
             private set => _idPatient = value > 0 ? value : _patientCounter++;
@@ -51,7 +51,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
             Gender = gender;
             Age = age;
             NationalID = nationalId;
-            Id_Patient = Id_Patient > 0 ? Id_Patient : _patientCounter++;
+            PatientID = Id_Patient;
         }
 
         public override void DisplayInfo()
