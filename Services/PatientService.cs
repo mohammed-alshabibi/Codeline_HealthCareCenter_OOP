@@ -5,6 +5,7 @@ using Codeline_HealthCareCenter_OOP.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Codeline_HealthCareCenter_OOP.Services
@@ -37,7 +38,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         public Patient GetPatientByName(string name) =>
             _patients.FirstOrDefault(p => p.FullName.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        public void UpdatePatientDetails(int uid, string phone)
+        public void UpdatePatientDetails(int uid, int phone)
         {
             var p = _patients.FirstOrDefault(p => p.UserID == uid);
             if (p != null)
@@ -97,8 +98,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
             var input = new PatientInputDTO
             {
-                Email = Ask("Email"),
-                Password = Ask("Password")
+                Email = AskEmail("Email"),
+                Password = ReadMaskedInput("Password")
             };
 
             var patient = AuthenticatePatient(input);
@@ -118,12 +119,115 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 await authService.SaveTokenToCookie("unauthorized");
             }
         }
-
-        //  Helper method for asking input
-        private static string Ask(string label)
+        private static string Ask(string label, bool required = true)
         {
-            Console.Write($"{label}: ");
-            return Console.ReadLine();
+            string input;
+            do
+            {
+                Console.Write($"{label} ");
+                input = Console.ReadLine();
+                if (required && string.IsNullOrWhiteSpace(input))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This field is required. Please try again.");
+                    Console.ResetColor();
+                }
+            } while (required && string.IsNullOrWhiteSpace(input));
+
+            return input;
+        }
+        //  Helper method for asking input
+        private static int AskInt(string label)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (int.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid integer.");
+                Console.ResetColor();
+            }
+        }
+
+        private static double AskDouble(string label)
+        {
+            double value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (double.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid decimal.");
+                Console.ResetColor();
+            }
+        }
+        private static string AskName(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Please enter a valid name (letters and spaces only).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string AskEmail(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string ReadMaskedInput(string label)
+        {
+            Console.Write(label);
+            string password = "";
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    password += keyInfo.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key != ConsoleKey.Enter);
+
+            Console.WriteLine(); // New line after Enter
+            return password;
         }
 
         // Optional: self signup from patient
@@ -134,13 +238,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
             PatientInputDTO input = new()
             {
 
-                FullName = Ask("Full Name"),
-                Email = Ask("Email"),
-                Password = Ask("Password"),
-                PhoneNumber = Ask("Phone Number"),
+                FullName = AskEmail("Full Name"),
+                Email = AskEmail("Email"),
+                Password = ReadMaskedInput("Password"),
+                PhoneNumber = AskInt("Phone Number"),
                 Gender = Ask("Gender"),
                 Age = int.Parse(Ask("Age")),
-                NationalID = Ask("National ID")
+                NationalID = AskInt("National ID")
             };
 
             AddPatient(input);
@@ -156,10 +260,10 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 FullName = Ask("Full Name"),
                 Email = Ask("Email"),
                 Password = Ask("Password"),
-                PhoneNumber = Ask("Phone Number"),
+                PhoneNumber = AskInt("Phone Number"),
                 Gender = Ask("Gender"),
                 Age = int.Parse(Ask("Age")),
-                NationalID = Ask("National ID")
+                NationalID = AskInt("National ID")
             };
 
             AddPatient(input);

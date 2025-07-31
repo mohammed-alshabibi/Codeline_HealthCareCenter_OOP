@@ -37,10 +37,10 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
                         parts[0], // FullName
                         parts[1], // Email
                         parts[2], // Password
-                        parts[3], // PhoneNumber
+                        int.Parse(parts[3]), // PhoneNumber
                         parts[4], // Gender
                         int.Parse(parts[5]), // Age
-                        parts[6], // NationalID
+                        int.Parse(parts[6]), // NationalID
                         int.Parse(parts[7]) // Id_Patient
                     ));
                 }

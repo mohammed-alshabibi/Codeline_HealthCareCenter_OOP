@@ -4,6 +4,7 @@ using Codeline_HealthCareCenter_OOP.Services;
 using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Menus;
 using Codeline_HealthCareCenter_OOP.Models;
+using System.Text.RegularExpressions;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
@@ -81,13 +82,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
                         var patient = new PatientInputDTO
                         {
-                            FullName = Ask("Full Name"),
-                            Email = Ask("Email"),
-                            Password = Ask("Password"),
-                            PhoneNumber = Ask("Phone Number"),
+                            FullName = AskName("Full Name"),
+                            Email = AskEmail("Email"),
+                            Password = ReadMaskedInput("Password"),
+                            PhoneNumber = AskInt("Phone Number"),
                             Gender = Ask("Gender"),
-                            Age = int.Parse(Ask("Age")),
-                            NationalID = Ask("National ID")
+                            Age = AskInt("Age"),
+                            NationalID = AskInt("National ID")
                         };
                         _patientService.AddPatient(patient);
                         Console.WriteLine(" Patient added! Press any key...");
@@ -104,7 +105,98 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 }
             }
         }
+        private static int AskInt(string label)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (int.TryParse(Console.ReadLine(), out value))
+                    return value;
 
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid integer.");
+                Console.ResetColor();
+            }
+        }
+
+        private static double AskDouble(string label)
+        {
+            double value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (double.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid decimal.");
+                Console.ResetColor();
+            }
+        }
+        private static string AskName(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Please enter a valid name (letters and spaces only).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string AskEmail(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string ReadMaskedInput(string label)
+        {
+            Console.Write(label);
+            string password = "";
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    password += keyInfo.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key != ConsoleKey.Enter);
+
+            Console.WriteLine(); // New line after Enter
+            return password;
+        }
         private void ShowClinicManagementMenu()
         {
             while (true)

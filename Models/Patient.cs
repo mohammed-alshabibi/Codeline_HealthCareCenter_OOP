@@ -8,14 +8,14 @@ namespace Codeline_HealthCareCenter_OOP.Models
 {
     public class Patient : User
     {
-        private string _phoneNumber;
+        private int _phoneNumber;
         private string _gender;
         private int _age;
-        private string _nationalId;
+        private int _nationalId;
         private static int _patientCounter = 1;
         private static int _idPatient;
 
-        public string PhoneNumber
+        public int PhoneNumber
         {
             get => _phoneNumber;
             set => _phoneNumber = value;
@@ -33,7 +33,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
             set => _age = value > 0 ? value : 0;
         }
 
-        public string NationalID
+        public int NationalID
         {
             get => _nationalId;
             internal set => _nationalId = value;
@@ -44,7 +44,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
             private set => _idPatient = value > 0 ? value : _patientCounter++;
         }
 
-        public Patient(string fullName, string email, string password, string phoneNumber, string gender, int age, string nationalId, int Id_Patient)
+        public Patient(string fullName, string email, string password, int phoneNumber, string gender, int age, int nationalId, int Id_Patient)
             : base(fullName, email, password, "Patient")
         {
             PhoneNumber = phoneNumber;

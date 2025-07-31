@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Codeline_HealthCareCenter_OOP.DTO_s;
 using Codeline_HealthCareCenter_OOP.Implementations;
@@ -49,10 +50,10 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "1":
                         var adminDto = new UserInputDTO
                         {
-                            FullName = Ask("Full Name:"),
-                            Email = Ask("Email:"),
-                            Password = Ask("Password:"),
-                            PhoneNumber = Ask("Phone Number:"),
+                            FullName = AskName("Full Name:"),
+                            Email = AskEmail("Email:"),
+                            Password = ReadMaskedInput("Password:"),
+                            PhoneNumber = AskPhone("Phone Number:"),
                             Role = "Admin"
                         };
                         Console.WriteLine("admin created");
@@ -67,14 +68,14 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "3":
                         var doctorInput = new DoctorInput
                         {
-                            FullName = Ask("Full Name:"),
-                            Email = Ask("Email:"),
-                            Password = Ask("Password:"),
+                            FullName = AskName("Full Name:"),
+                            Email = AskEmail("Email:"),
+                            Password = ReadMaskedInput("Password:"),
                             Specialization = Ask("Specialization:"),
-                            PhoneNumber = Ask("Phone Number:"),
+                            PhoneNumber = AskPhone("Phone Number:"),
                             Gender = Ask("Gender:"),
-                            YearsOfExperience = int.Parse(Ask("Years of Experience:")),
-                            Salary = double.Parse(Ask("Salary:")),
+                            YearsOfExperience = AskInt("Years of Experience:"),
+                            Salary = AskDouble("Salary:"),
                             Availability = Ask("Availability (e.g., Available/Busy):"),
                             DoctorID = Ask("Doctor ID:")
                         };
@@ -82,14 +83,16 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         doctorService.AddDoctor(doctorInput);
                         Pause();
                         break;
-            
+
+
                     case "4":
                         BranchDTO branchDto = new BranchDTO
                         {
-                            BranchId = int.Parse(Ask("Enter Branch ID")),
+                            BranchId = AskInt("Enter Branch ID"),
                             BranchName = Ask("Enter Branch Name"),
                             Location = Ask("Enter Branch Location")
                         };
+
 
                         branchService.AddBranch(branchDto); 
                         Pause();
@@ -97,9 +100,10 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "5":
                         DepartmentDTO departmentDto = new DepartmentDTO
                         {
-                            DepartmentId = int.Parse(Ask("Enter Department ID")),
+                            DepartmentId = AskInt("Enter Department ID"),
                             DepartmentName = Ask("Enter Department Name")
                         };
+
                         departmentService.CreateDepartment(departmentDto);
                         Pause();
                         break;
@@ -132,11 +136,136 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("\nPress any key to return...");
             Console.ReadKey();
         }
-        private static string Ask(string label)
+        private static string AskPhone(string label)
         {
-            Console.Write($"{label} ");
-            return Console.ReadLine();
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^\+?\d{7,15}$"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid phone number. Enter digits only (min 7 digits, optional +).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
         }
+
+        private static string Ask(string label, bool required = true)
+        {
+            string input;
+            do
+            {
+                Console.Write($"{label} ");
+                input = Console.ReadLine();
+                if (required && string.IsNullOrWhiteSpace(input))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This field is required. Please try again.");
+                    Console.ResetColor();
+                }
+            } while (required && string.IsNullOrWhiteSpace(input));
+
+            return input;
+        }
+
+        private static int AskInt(string label)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (int.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid integer.");
+                Console.ResetColor();
+            }
+        }
+
+        private static double AskDouble(string label)
+        {
+            double value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (double.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid decimal.");
+                Console.ResetColor();
+            }
+        }
+        private static string AskName(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Please enter a valid name (letters and spaces only).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string AskEmail(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+
+        private static string ReadMaskedInput(string label)
+        {
+            Console.Write(label);
+            string password = "";
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    password += keyInfo.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key != ConsoleKey.Enter);
+
+            Console.WriteLine(); // New line after Enter
+            return password;
+        }
+
 
     }
 }

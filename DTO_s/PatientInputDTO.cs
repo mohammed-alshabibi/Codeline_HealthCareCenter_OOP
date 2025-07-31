@@ -12,9 +12,9 @@ namespace Codeline_HealthCareCenter_OOP.DTO_s
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string PhoneNumber { get; set; }
+        public int PhoneNumber { get; set; }
         public string Gender { get; set; }
         public int Age { get; set; }
-        public string NationalID { get; set; }
+        public int NationalID { get; set; }
     }
 }
