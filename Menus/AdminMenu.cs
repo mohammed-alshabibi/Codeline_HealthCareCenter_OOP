@@ -61,7 +61,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 switch (input)
                 {
                     case "1":
-                        ManageClinics();
+                        ShowClinicManagementMenu();
                         break;
                     case "2":
                         ManageBookings();
@@ -105,35 +105,85 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
-        private void ManageClinics()
+        private void ShowClinicManagementMenu()
         {
-            Console.Clear();
-            Console.WriteLine("=== Manage Clinics ===");
-
-            _clinicService.GetAllClinics();
-
-            Console.WriteLine("\n1. Add Clinic");
-            Console.WriteLine("2. Back");
-            Console.Write("\n> ");
-            if (Console.ReadLine() == "1")
+            while (true)
             {
-                Console.Write("Name: ");
-                string name = Console.ReadLine();
-                Console.Write("Department: ");
-                string dept = Console.ReadLine();
-                Console.Write("Location: ");
-                string loc = Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("🔧 Clinic Management");
+                Console.WriteLine("1. Add Clinic");
+                Console.WriteLine("2. View All Clinics");
+                Console.WriteLine("3. Update Clinic");
+                Console.WriteLine("4. Delete Clinic");
+                Console.WriteLine("5. Back");
+                Console.Write("Select an option: ");
+                var choice = Console.ReadLine();
 
-                _clinicService.AddClinic(new ClinicInputDTO
+                switch (choice)
                 {
-                    ClinicName = name,
-                    Department = dept,
-                    Location = loc
-                });
+                    case "1":
+                        Console.Write("Clinic Name: ");
+                        string name = Console.ReadLine();
+                        Console.Write("Department: ");
+                        string department = Console.ReadLine();
+                        Console.Write("Location: ");
+                        string location = Console.ReadLine();
 
+                        var newClinic = new ClinicInputDTO
+                        {
+                            ClinicName = name,
+                            Department = department,
+                            Location = location
+                        };
+                        _clinicService.AddClinic(newClinic);
+                        break;
 
-                Console.WriteLine(" Clinic added! Press any key...");
-                Console.ReadKey();
+                    case "2":
+                        var clinics = _clinicService.GetAllClinics();
+                        foreach (var clinic in clinics)
+                        {
+                            Console.WriteLine($"ID: {clinic.ClinicId} | Name: {clinic.ClinicName} | Dept: {clinic.Department} | Location: {clinic.Location}");
+                        }
+                        break;
+
+                    case "3":
+                        Console.Write("Clinic ID to update: ");
+                        int updateId = int.Parse(Console.ReadLine());
+                        Console.Write("New Name: ");
+                        string newName = Console.ReadLine();
+                        Console.Write("New Department: ");
+                        string newDept = Console.ReadLine();
+                        Console.Write("New Location: ");
+                        string newLoc = Console.ReadLine();
+
+                        var updatedClinic = new ClinicInputDTO
+                        {
+                            ClinicName = newName,
+                            Department = newDept,
+                            Location = newLoc
+                        };
+                        _clinicService.UpdateClinic(updateId, updatedClinic);
+                        Console.Write(" updated  ");
+                        Console.ReadKey();
+                        break;
+
+                    case "4":
+                        Console.Write("Clinic ID to delete: ");
+                        int deleteId = int.Parse(Console.ReadLine());
+                        bool deleted = _clinicService.DeleteClinic(deleteId);
+                        Console.WriteLine(deleted ? "Deleted ✅" : "Clinic not found ❌");
+                        break;
+
+                    case "5":
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid choice, try again.");
+                        break;
+                }
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
             }
         }
 
