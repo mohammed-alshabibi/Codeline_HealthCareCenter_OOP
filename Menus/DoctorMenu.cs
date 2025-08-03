@@ -29,13 +29,25 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("=== Doctor Menu ===");
-                Console.WriteLine("1. Assign to Clinic");
-                Console.WriteLine("2. View Patient Records");
-                Console.WriteLine("3. Add/Edit Patient Record");
-                Console.WriteLine("4. Create Appointment");
-                Console.WriteLine("5. Logout");
-                Console.Write("Choose an option: ");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("╔══════════════════════════════════════════════╗");
+                Console.WriteLine("║               DOCTOR MENU                    ║");
+                Console.WriteLine("╠══════════════════════════════════════════════╣");
+                Console.ResetColor();
+
+                Console.WriteLine("║  [1] Assign to Clinic                        ║");
+                Console.WriteLine("║  [2] View Patient Records                    ║");
+                Console.WriteLine("║  [3] Add/Edit Patient Record                 ║");
+                Console.WriteLine("║  [4] Create Appointment                      ║");
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("║  [5]  Logout                                 ║");
+                Console.ResetColor();
+
+                Console.WriteLine("╚══════════════════════════════════════════════╝");
+
+                Console.Write("\n🔸 Choose an option: ");
+
 
                 switch (Console.ReadLine())
                 {
@@ -72,14 +84,27 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.Clear();
             Console.WriteLine("=== Patient Records ===");
             var records = _doctorService.GetDoctorPatientRecords(_doctorId);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                                   PATIENT RECORDS                                                  ║");
+            Console.WriteLine("╠════════════╦════════════════════╦══════════════════════╦══════════════════════╦════════════════════╣");
+            Console.WriteLine("║ Record ID  ║ Patient Name       ║ Diagnosis            ║ Treatment            ║ Visit Date         ║");
+            Console.WriteLine("╠════════════╬════════════════════╬══════════════════════╬══════════════════════╬════════════════════╣");
+            Console.ResetColor();
+
             foreach (var r in records)
             {
-                Console.WriteLine($"Record ID: {r.RecordId} | Name: {r.PatientName} | Diagnosis: {r.Diagnosis} | Treatment: {r.Treatment} | Date: {r.VisitDate:d}");
+                Console.WriteLine($"║ {r.RecordId,-10} ║ {r.PatientName,-18} ║ {r.Diagnosis,-20} ║ {r.Treatment,-20} ║ {r.VisitDate:yyyy-MM-dd}     ║");
             }
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("╚════════════╩════════════════════╩══════════════════════╩══════════════════════╩════════════════════╝");
+            Console.ResetColor();
+
             Console.WriteLine("\nPress any key to go back...");
             Console.ReadKey();
         }
-
+        
         private void AddOrEditRecord()
         {
             Console.Clear();

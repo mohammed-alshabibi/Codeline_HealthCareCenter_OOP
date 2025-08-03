@@ -26,23 +26,32 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(" SUPER ADMIN MENU");
+                Console.WriteLine("╔════════════════════════════════════════════════════╗");
+                Console.WriteLine("║                 SUPER ADMIN MENU                   ║");
+                Console.WriteLine("╠════════════════════════════════════════════════════╣");
+                Console.WriteLine("║  Admin Management                                  ║");
+                Console.WriteLine("║    [1] Create Admin                                ║");
+                Console.WriteLine("║    [2] View All Admins                             ║");
+                Console.WriteLine("║                                                    ║");
+                Console.WriteLine("║  Doctor Management                                 ║");
+                Console.WriteLine("║    [3] Add Doctor                                  ║");
+                Console.WriteLine("║                                                    ║");
+                Console.WriteLine("║  Branch & Department                               ║");
+                Console.WriteLine("║    [4] Create Branch                               ║");
+                Console.WriteLine("║    [5] Create Department                           ║");
+                Console.WriteLine("║    [6] Assign Department to Branch                 ║");
+                Console.WriteLine("║                                                    ║");
+                Console.WriteLine("║  View Records                                      ║");
+                Console.WriteLine("║    [7] View All Branches                           ║");
+                Console.WriteLine("║    [8] View All Departments                        ║");
+                Console.WriteLine("║                                                    ║");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("║ [9]  Logout                                        ║");
                 Console.ResetColor();
+                Console.WriteLine("╚════════════════════════════════════════════════════╝");
 
-                Console.WriteLine("1.Create Admin");
-                Console.WriteLine("2.View All Admins");
-                Console.WriteLine("3.Add Doctors ");
+                Console.Write("\n Select an option: ");
 
-                Console.WriteLine("4.Create Branch");
-                Console.WriteLine("5.Create Department");
-                Console.WriteLine("6.Assign Department to Branch");
-
-                Console.WriteLine("7.View All Branches");
-                Console.WriteLine("8.View All Departments");
-
-                Console.WriteLine("9.Logout");
-
-                Console.Write("\nChoose an option: ");
                 string choice = Console.ReadLine();
 
                 switch (choice)

@@ -26,15 +26,62 @@ namespace Codeline_HealthCareCenter_OOP
             while (true)
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("=== Welcome to Codeline HealthCare System ===");
-                Console.ResetColor();
-                
-                Console.Write("Enter Email: ");
-                string email = Console.ReadLine();
-                Console.Write("Enter Password: ");
-                string password = Console.ReadLine();
 
+                // Top border
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("╔════════════════════════════════════════════════════╗");
+
+                // Header content with different colors per word
+                Console.Write("║         ");
+
+                string[] words = { "Welcome", "to", "Codeline", "HealthCare", "System" };
+                ConsoleColor[] colors = {
+            ConsoleColor.Cyan,
+            ConsoleColor.Green,
+            ConsoleColor.Yellow,
+            ConsoleColor.Magenta,
+            ConsoleColor.Blue
+        };
+
+                for (int i = 0; i < words.Length; i++)
+                {
+                    Console.ForegroundColor = colors[i % colors.Length];
+                    Console.Write(words[i] + " ");
+                }
+
+                // Fill remaining space to align border
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("     ║");
+
+                // Bottom border
+                Console.WriteLine("╚════════════════════════════════════════════════════╝");
+                Console.ResetColor();
+
+                Console.WriteLine();
+
+                // Login title
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("  Secure Login");
+                Console.ResetColor();
+
+                Console.WriteLine("----------------------------------------------");
+
+                // Email input
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(" Email Address: ");
+                Console.ForegroundColor = ConsoleColor.White;
+                string email = Console.ReadLine();
+
+                // Password input (masked or plain)
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(" Password     : ");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                string password = Console.ReadLine();
+                // string password = ReadPassword(); // Enable this line to use password masking
+
+                Console.WriteLine("----------------------------------------------");
+                Console.ResetColor();
                 var user = await authService.Login(email, password); // should return UserInputDTO
 
 
@@ -83,7 +130,7 @@ namespace Codeline_HealthCareCenter_OOP
                                 authService
 
                             );
-                            patientMenu.Show(null); // Or pass patient DTO if needed
+                            patientMenu.Show(null); 
                             break;
 
 

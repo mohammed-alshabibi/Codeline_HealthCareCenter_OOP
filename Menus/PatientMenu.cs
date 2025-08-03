@@ -28,14 +28,18 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(" Welcome to Patient Portal");
+                Console.WriteLine("╔══════════════════════════════════════════════╗");
+                Console.WriteLine("║           Welcome to Patient Portal          ║");
+                Console.WriteLine("╠══════════════════════════════════════════════╣");
                 Console.ResetColor();
 
-                Console.WriteLine("1.  Sign Up");
-                Console.WriteLine("2.  Login");
-                Console.WriteLine("3.  Exit");
+                Console.WriteLine("║  [1] Sign Up                                 ║");
+                Console.WriteLine("║  [2] Login                                   ║");
+                Console.WriteLine("║  [3] Exit                                    ║");
+                Console.WriteLine("╚══════════════════════════════════════════════╝");
 
-                Console.Write("\nChoose an option: ");
+                Console.Write("\n Choose an option: ");
+
                 string mainChoice = Console.ReadLine();
 
                 switch (mainChoice)
@@ -336,11 +340,20 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             else
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n Available Appointment Slots:");
+                Console.WriteLine("╔════════════════════════════════════════════════╗");
+                Console.WriteLine("║          AVAILABLE APPOINTMENT SLOTS           ║");
+                Console.WriteLine("╠════════════════════╦═══════════════════════════╣");
+                Console.WriteLine("║     Date           ║        Time               ║");
+                Console.WriteLine("╠════════════════════╬═══════════════════════════╣");
+                Console.ResetColor();
+
                 foreach (var slot in availableSlots)
                 {
-                    Console.WriteLine($"- {slot.AppointmentDate:yyyy-MM-dd} at {slot.AppointmentTime}");
+                    Console.WriteLine($"║ {slot.AppointmentDate:yyyy-MM-dd,-18} ║ {slot.AppointmentTime,-25} ║");
                 }
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("╚════════════════════╩═══════════════════════════╝");
             }
 
             Console.ResetColor();
