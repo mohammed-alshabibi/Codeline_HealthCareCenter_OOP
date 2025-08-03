@@ -13,7 +13,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         IEnumerable<BookingOutputDTO> GetAllBooking(); // Method to retrieve all bookings
         IEnumerable<BookingInputDTO> GetAvailableAppointmentsBy(int? clinicId, int? departmentId); // Method to get available appointments by clinic and department
         IEnumerable<BookingOutputDTO> GetBookedAppointments(int patientId); // Method to get booked appointments for a patient
-        Booking GetBookingById(int bookingId); // Method to get a booking by its ID
+        Booking? GetBookingById(int bookingId); // Method to get a booking by its ID
         IEnumerable<Booking> GetBookingsByClinicAndDate(int clinicId, DateTime date); // Method to get bookings by clinic and date
         IEnumerable<Booking> ScheduledAppointments(int clinicId, DateTime date); // Method to get scheduled appointments for a clinic on a specific date
         void UpdateBookedAppointment(BookingInputDTO previous, BookingInputDTO updated, int patientId); // Method to update a booked appointment

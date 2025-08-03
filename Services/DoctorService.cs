@@ -49,46 +49,15 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             return _doctors;
         }
-        public Doctor DoctorLogin()
-        {
-            Console.Clear();
-            Console.WriteLine(" Doctor Login");
-
-            Console.Write("Email: ");
-            string email = Console.ReadLine();
-
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-
-            var doctor = _doctors.FirstOrDefault(d =>
-                d.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                d.Password == password);
-
-            if (doctor != null)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\n Welcome Dr. {doctor.FullName}!");
-                Console.ResetColor();
-                return doctor;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(" Invalid email or password.");
-                Console.ResetColor();
-                return null;
-            }
-        }
-
         // Method to get a doctor by ID
-        public Doctor GetDoctorById(int id) =>
+        public Doctor? GetDoctorById(int id) =>
     _doctors.FirstOrDefault(d => int.TryParse(d.doctorID, out int parsedId) && parsedId == id);
 
         // Method to get a doctor by email
-        public Doctor GetDoctorByEmail(string email) =>
+        public Doctor? GetDoctorByEmail(string email) =>
             _doctors.FirstOrDefault(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         // Method to get a doctor by name
-        public Doctor GetDoctorByName(string docName) =>
+        public Doctor? GetDoctorByName(string docName) =>
             _doctors.FirstOrDefault(d => d.FullName.Equals(docName, StringComparison.OrdinalIgnoreCase));
         // updates an existing doctor's details
         public void UpdateDoctor(Doctor doctor) 
@@ -109,11 +78,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
             return Enumerable.Empty<Doctor>(); // implement later if needed
         }
         // Method to get a doctor's data by name or ID
-        public DoctorOutPutDTO GetDoctorData(string? docName, int? Did)
+        public DoctorOutPutDTO? GetDoctorData(string? docName, int? Did)
         {
             var doctor = Did != null
                 ? GetDoctorById(Did.Value)
-                : GetDoctorByName(docName);
+                : docName != null
+                    ? GetDoctorByName(docName)
+                    : null;
 
             if (doctor == null) return null;
 
@@ -137,7 +108,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
         // Method to get doctor details by ID
-        public DoctorOutPutDTO GetDoctorDetailsById(int uid)
+        public DoctorOutPutDTO? GetDoctorDetailsById(int uid)
         {
             var doc = GetDoctorById(uid);
             if (doc == null) return null;

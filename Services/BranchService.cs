@@ -41,7 +41,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         }
 
         // Method to get a branch by ID
-        public BranchDTO GetBranchById(int id)
+        public BranchDTO? GetBranchById(int id)
         {
             var branch = _branches.FirstOrDefault(b => b.BranchId == id); // Find branch by ID
             return branch == null ? null : new BranchDTO // Return DTO if found
@@ -52,7 +52,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         }
 
         // Method to get branch details by name or ID
-        public BranchDTO GetBranchDetails(string? branchName, int? branchId)
+        public BranchDTO? GetBranchDetails(string? branchName, int? branchId)
         {
             var branch = _branches.FirstOrDefault(b =>
                 (!string.IsNullOrEmpty(branchName) && b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase))
@@ -65,7 +65,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             };
         }
         // Method to get branch details by branch name
-        public Branch GetBranchDetailsByBranchName(string branchName)
+        public Branch? GetBranchDetailsByBranchName(string branchName)
         {
             return _branches.FirstOrDefault(b => b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase));
         }

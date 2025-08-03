@@ -40,7 +40,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
                 Console.Write("\n Choose an option: ");
 
-                string mainChoice = Console.ReadLine();
+                string mainChoice = Console.ReadLine() ?? string.Empty;
 
                 switch (mainChoice)
                 {
@@ -103,7 +103,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.WriteLine("4.  Logout");
 
                 Console.Write("\nChoose an option: ");
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine() ?? string.Empty;
 
                 switch (choice)
                 {
@@ -117,27 +117,50 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         }
                         this.Pause();
                         break;
-
                     case "2":
                         Console.Clear();
                         this.ViewAvailableBookings();
                         Console.WriteLine(" Book Appointment");
 
                         Console.Write("Clinic ID: ");
-                        int clinicId = int.Parse(Console.ReadLine());
+                        string? clinicInput = Console.ReadLine();
+                        if (!int.TryParse(clinicInput, out int clinicId))
+                        {
+                            Console.WriteLine("Invalid Clinic ID.");
+                            this.Pause();
+                            break;
+                        }
 
                         Console.Write("Department ID: ");
-                        int departmentId = int.Parse(Console.ReadLine());
+                        string? departmentInput = Console.ReadLine();
+                        if (!int.TryParse(departmentInput, out int departmentId))
+                        {
+                            Console.WriteLine("Invalid Department ID.");
+                            this.Pause();
+                            break;
+                        }
 
                         Console.Write("Doctor ID (optional, press Enter to skip): ");
-                        string doctorInput = Console.ReadLine();
-                        int? doctorId = string.IsNullOrWhiteSpace(doctorInput) ? null : int.Parse(doctorInput);
+                        string? doctorInput = Console.ReadLine();
+                        int? doctorId = string.IsNullOrWhiteSpace(doctorInput) ? null : int.TryParse(doctorInput, out int tempId) ? tempId : null;
 
                         Console.Write("Date (yyyy-MM-dd): ");
-                        DateTime date = DateTime.Parse(Console.ReadLine());
+                        string? dateInput = Console.ReadLine();
+                        if (!DateTime.TryParse(dateInput, out DateTime date))
+                        {
+                            Console.WriteLine("Invalid date format.");
+                            this.Pause();
+                            break;
+                        }
 
                         Console.Write("Time (HH:mm): ");
-                        TimeSpan time = TimeSpan.Parse(Console.ReadLine());
+                        string? timeInput = Console.ReadLine();
+                        if (!TimeSpan.TryParse(timeInput, out TimeSpan time))
+                        {
+                            Console.WriteLine("Invalid time format.");
+                            this.Pause();
+                            break;
+                        }
 
                         var booking = new BookingInputDTO
                         {
@@ -208,11 +231,24 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("=== View Available Bookings ===");
 
             Console.Write("Enter Clinic ID: ");
-            int clinicId = int.Parse(Console.ReadLine());
+            string? clinicInput = Console.ReadLine();
+            if (!int.TryParse(clinicInput, out int clinicId))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid Clinic ID.");
+                Console.ResetColor();
+                return;
+            }
 
             Console.Write("Enter Department ID: ");
-            int departmentId = int.Parse(Console.ReadLine());
-
+            string? deptInput = Console.ReadLine();
+            if (!int.TryParse(deptInput, out int departmentId))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid Department ID.");
+                Console.ResetColor();
+                return;
+            }
             var availableSlots = _bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
 
             if (!availableSlots.Any())
@@ -245,11 +281,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for input with validation
         private static string Ask(string label, bool required = true)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write($"{label} ");
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (required && string.IsNullOrWhiteSpace(input))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -278,11 +314,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for a name input with validation
         private static string AskName(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -297,11 +333,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for an email input with validation
         private static string AskEmail(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;

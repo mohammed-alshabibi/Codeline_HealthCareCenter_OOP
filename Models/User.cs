@@ -6,10 +6,10 @@ namespace Codeline_HealthCareCenter_OOP.Models
         private static int _userCounter = 1;
 
         private int userId;
-        private string fullName;
-        private string email;
-        private string password;
-        protected string role;
+        private string fullName = string.Empty;
+        private string email = string.Empty;
+        private string password = string.Empty;
+        private string role = string.Empty;
         internal bool isActive;
 
         public int UserID => userId;

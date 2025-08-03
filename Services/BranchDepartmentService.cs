@@ -38,11 +38,24 @@ namespace Codeline_HealthCareCenter_OOP.Services
         public void AssignDepartmentToBranch()
         {
             Console.Write("Enter Branch ID: ");
-            int branchId = int.Parse(Console.ReadLine());
+            string? branchInput = Console.ReadLine();
+            if (!int.TryParse(branchInput, out int branchId))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid Branch ID.");
+                Console.ResetColor();
+                return;
+            }
 
             Console.Write("Enter Department ID: ");
-            int departmentId = int.Parse(Console.ReadLine());
-
+            string? departmentInput = Console.ReadLine();
+            if (!int.TryParse(departmentInput, out int departmentId))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid Department ID.");
+                Console.ResetColor();
+                return;
+            }
             var dto = new BranchDepDTO
             {
                 BranchId = branchId,
@@ -84,7 +97,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
         }
 
         // Method to get a specific branch-department relationship by IDs
-        public BranchDepartment GetBranchDep(int departmentId, int branchId)
+        public BranchDepartment? GetBranchDep(int departmentId, int branchId)
         {
             return _branchDeps.FirstOrDefault(bd => bd.BranchId == branchId && bd.DepartmentId == departmentId);
         }

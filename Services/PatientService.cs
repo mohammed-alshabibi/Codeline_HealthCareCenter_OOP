@@ -28,10 +28,10 @@ namespace Codeline_HealthCareCenter_OOP.Services
         // Method to retrieve all patients
         public IEnumerable<Patient> GetAllPatients() => _patients;
         // Method to get a patient by their unique ID
-        public Patient GetPatientById(int Pid) =>
+        public Patient? GetPatientById(int Pid) =>
             _patients.FirstOrDefault(p => p.UserID == Pid);
         // Method to get a patient by their name
-        public Patient GetPatientByName(string name) =>
+        public Patient? GetPatientByName(string name) =>
             _patients.FirstOrDefault(p => p.FullName.Equals(name, StringComparison.OrdinalIgnoreCase));
         // Method to update a patient's details
         public void UpdatePatientDetails(int uid, int phone)
@@ -41,7 +41,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 p.PhoneNumber = phone;
         }
         // Method to authenticate a patient using their email and password
-        public PatienoutputDTO AuthenticatePatient(PatientInputDTO dto)
+        public PatienoutputDTO? AuthenticatePatient(PatientInputDTO dto)
         {
             var patient = _patients.FirstOrDefault(p =>
                 p.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase) &&

@@ -148,11 +148,13 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 {
                     case "1":
                         Console.Write("Clinic Name: ");
-                        string name = Console.ReadLine();
+                        string name = Console.ReadLine() ?? "";
+
                         Console.Write("Department: ");
-                        string department = Console.ReadLine();
+                        string department = Console.ReadLine() ?? "";
+
                         Console.Write("Location: ");
-                        string location = Console.ReadLine();
+                        string location = Console.ReadLine() ?? "";
 
                         var newClinic = new ClinicInputDTO
                         {
@@ -189,11 +191,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
                         Console.Write("Clinic ID to update: ");
                         int updateId = int.Parse(Console.ReadLine());
                         Console.Write("New Name: ");
-                        string newName = Console.ReadLine();
+                        string newName = Console.ReadLine() ?? "";
                         Console.Write("New Department: ");
-                        string newDept = Console.ReadLine();
+                        string newDept = Console.ReadLine() ?? "";
                         Console.Write("New Location: ");
-                        string newLoc = Console.ReadLine();
+                        string newLoc = Console.ReadLine() ?? "";
 
                         var updatedClinic = new ClinicInputDTO
                         {
@@ -274,24 +276,64 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (Console.ReadLine() == "1")
             {
                 Console.Write("Patient ID: ");
-                int patientId = int.Parse(Console.ReadLine());
+                string? patientIdInput = Console.ReadLine();
+                if (!int.TryParse(patientIdInput, out int patientId))
+                {
+                    Console.WriteLine("Invalid Patient ID.");
+                    return;
+                }
 
                 var input = new BookingInputDTO();
+
                 Console.Write("Clinic ID: ");
-                input.ClinicId = int.Parse(Console.ReadLine());
-                Console.Write("Dept ID: ");
-                input.DepartmentId = int.Parse(Console.ReadLine());
+                string? clinicIdInput = Console.ReadLine();
+                if (!int.TryParse(clinicIdInput, out int clinicId))
+                {
+                    Console.WriteLine("Invalid Clinic ID.");
+                    return;
+                }
+                input.ClinicId = clinicId;
+
+                Console.Write("Department ID: ");
+                string? deptIdInput = Console.ReadLine();
+                if (!int.TryParse(deptIdInput, out int deptId))
+                {
+                    Console.WriteLine("Invalid Department ID.");
+                    return;
+                }
+                input.DepartmentId = deptId;
                 Console.Write("Doctor ID: ");
-                input.DoctorId = int.Parse(Console.ReadLine());
-                Console.Write("Date (yyyy-mm-dd): ");
-                input.AppointmentDate = DateTime.Parse(Console.ReadLine());
+                string? doctorIdInput = Console.ReadLine();
+                if (!int.TryParse(doctorIdInput, out int doctorId))
+                {
+                    Console.WriteLine("Invalid Doctor ID.");
+                    return;
+                }
+                input.DoctorId = doctorId;
+
+                Console.Write("Date (yyyy-MM-dd): ");
+                string? dateInput = Console.ReadLine();
+                if (!DateTime.TryParse(dateInput, out DateTime appointmentDate))
+                {
+                    Console.WriteLine("Invalid date format.");
+                    return;
+                }
+                input.AppointmentDate = appointmentDate;
+
                 Console.Write("Time (hh:mm): ");
-                input.AppointmentTime = TimeSpan.Parse(Console.ReadLine());
+                string? timeInput = Console.ReadLine();
+                if (!TimeSpan.TryParse(timeInput, out TimeSpan appointmentTime))
+                {
+                    Console.WriteLine("Invalid time format.");
+                    return;
+                }
+                input.AppointmentTime = appointmentTime;
 
                 _bookingService.BookAppointment(input, patientId);
 
                 Console.WriteLine(" Booking created! Press any key...");
                 Console.ReadKey();
+
             }
         }
         // Method to manage patient records
@@ -347,7 +389,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Console.Write("\n🔸 Select an option: ");
 
                 Console.Write("\n> ");
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine() ?? "";
 
                 if (choice == "1")
                 {
@@ -503,8 +545,15 @@ namespace Codeline_HealthCareCenter_OOP.Services
                     Console.Write("Treatment: ");
                     input.Treatment = Console.ReadLine();
 
-                    Console.Write("Visit Date (yyyy-mm-dd): ");
-                    input.VisitDate = DateTime.Parse(Console.ReadLine());
+                    Console.Write("Visit Date (yyyy-MM-dd): ");
+                    string? visitDateInput = Console.ReadLine();
+                    if (!DateTime.TryParse(visitDateInput, out DateTime visitDate))
+                    {
+                        Console.WriteLine("Invalid date format.");
+                        Pause();
+                        continue;
+                    }
+                    input.VisitDate = visitDate;
 
                     // Validations
                     if (input.VisitDate > DateTime.Now)
@@ -612,9 +661,9 @@ namespace Codeline_HealthCareCenter_OOP.Services
             if (Console.ReadLine() == "1")
             {
                 Console.Write("Branch Name: ");
-                string name = Console.ReadLine();
+                string name = Console.ReadLine() ?? "";
                 Console.Write("Location: ");
-                string loc = Console.ReadLine();
+                string loc = Console.ReadLine() ?? "";
 
                 int newId = branches.Count > 0 ? branches.Max(b => b.BranchId) + 1 : 1;
 
@@ -696,11 +745,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
         // Methods to ask for input with validation
         private static string AskName(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? "";
                 if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -756,11 +805,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
         // Method to ask for a valid email input
         private static string AskEmail(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? "";
                 if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;

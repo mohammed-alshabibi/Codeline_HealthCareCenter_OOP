@@ -30,7 +30,7 @@ public class UserService : IUserService
             user.IsActive = false;
     }
     // Method to authenticate a user using email and password
-    public UserOutputDTO AuthenticateUser(UserInputDTO dto)
+    public UserOutputDTO? AuthenticateUser(UserInputDTO dto)
     {
         var user = users.FirstOrDefault(u =>
             u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase) &&
@@ -49,13 +49,13 @@ public class UserService : IUserService
     public bool EmailExists(string email) =>
         users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
     // Method to get all users
-    public User GetUserById(int uid) =>
+    public User? GetUserById(int uid) =>
         users.FirstOrDefault(u => u.UserID == uid);
     // Method to get a user by their name
-    public User GetUserByName(string userName) =>
+    public User? GetUserByName(string userName) =>
         users.FirstOrDefault(u => u.FullName.Equals(userName, StringComparison.OrdinalIgnoreCase));
     // Method to get a user's name by their unique ID
-    public string GetUserName(int userId) =>
+    public string? GetUserName(int userId) =>
         users.FirstOrDefault(u => u.UserID == userId)?.FullName;
     // Method to update a user's password
     public void UpdatePassword(int uid, string currentPassword, string newPassword)
@@ -75,7 +75,7 @@ public class UserService : IUserService
         }
     }
     // Method to get user data by name or unique ID
-    public UserOutputDTO GetUserData(string? userName, int? uid)
+    public UserOutputDTO? GetUserData(string? userName, int? uid)
     {
         var user = uid.HasValue
             ? users.FirstOrDefault(u => u.UserID == uid.Value)

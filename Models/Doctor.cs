@@ -5,13 +5,13 @@ using Codeline_HealthCareCenter_OOP.Models;
 public class Doctor : User
 {
     // Existing fields
-    private string doctorId;
-    private string specialization;
-    private string phoneNumber;
-    private string gender;
+    private string doctorId = string.Empty;
+    private string specialization = string.Empty;
+    private string phoneNumber = string.Empty;
+    private string gender = string.Empty;
+    private string availability = string.Empty;
     private int experience;
     private double salary;
-    private string availability;
 
     //  Add these two properties
     public int ClinicId { get; set; }

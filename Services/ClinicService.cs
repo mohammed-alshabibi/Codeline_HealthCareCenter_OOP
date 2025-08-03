@@ -60,7 +60,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         }
         //  Retrieves a clinic by its ID
-        public Clinic GetClinicById(int clinicId)
+        public Clinic? GetClinicById(int clinicId)
         {
             return clinics.FirstOrDefault(c => c.ClinicId == clinicId);
         }

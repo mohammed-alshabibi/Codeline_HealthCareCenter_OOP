@@ -9,8 +9,8 @@ namespace Codeline_HealthCareCenter_OOP.Models
     public class Branch
     {
         public int BranchId { get; set; }
-        public string BranchName { get; set; }
-        public string Location { get; set; }
+        public string BranchName { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
 
         // Navigation

@@ -13,15 +13,15 @@ namespace Codeline_HealthCareCenter_OOP.Services
         bool EmailExists(string email); // Method to check if an email already exists in the doctor list
         IEnumerable<Doctor> GetAllDoctors(); // Method to retrieve all doctors
         IEnumerable<Doctor> GetDoctorByBrancDep(int bid, int depid); // Method to get doctors by branch and department IDs
-        Doctor GetDoctorByEmail(string email); // Method to get a doctor by their email
-        Doctor GetDoctorById(int uid); // Method to get a doctor by their unique ID
-        Doctor GetDoctorByName(string docName); // Method to get a doctor by their name
-        DoctorOutPutDTO GetDoctorData(string? docName, int? Did); // Method to get doctor data by name or department ID
+        Doctor? GetDoctorByEmail(string email); // Method to get a doctor by their email
+        Doctor? GetDoctorById(int uid); // Method to get a doctor by their unique ID
+        Doctor? GetDoctorByName(string docName); // Method to get a doctor by their name
+        DoctorOutPutDTO? GetDoctorData(string? docName, int? Did); // Method to get doctor data by name or department ID
         IEnumerable<DoctorOutPutDTO> GetDoctorsByBranchName(string branchName); // Method to get doctors by branch name
         IEnumerable<DoctorOutPutDTO> GetDoctorsByDepartmentName(string departmentName); // Method to get doctors by department name
         void UpdateDoctor(Doctor doctor); // Method to update a doctor's details
         void UpdateDoctorDetails(DoctorUpdateDTO input); // Method to update a doctor's details based on input DTO
-        DoctorOutPutDTO GetDoctorDetailsById(int uid); // Method to get doctor details by ID
+        DoctorOutPutDTO? GetDoctorDetailsById(int uid); // Method to get doctor details by ID
 
     }
 }

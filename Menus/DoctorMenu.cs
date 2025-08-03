@@ -71,9 +71,19 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         private void AssignToClinic()
         {
             Console.Write("Enter Clinic ID: ");
-            int clinicId = int.Parse(Console.ReadLine());
+            string? clinicInput = Console.ReadLine();
+            if (!int.TryParse(clinicInput, out int clinicId))
+            {
+                Console.WriteLine("Invalid Clinic ID. Please enter a valid number.");
+                return;
+            }
             Console.Write("Enter Department ID: ");
-            int deptId = int.Parse(Console.ReadLine());
+            string? deptInput = Console.ReadLine();
+            if (!int.TryParse(deptInput, out int deptId))
+            {
+                Console.WriteLine("Invalid Department ID. Please enter a valid number.");
+                return;
+            }
 
             _doctorService.AssignToClinic(_doctorId, clinicId, deptId);
             Console.WriteLine(" Assigned successfully! Press any key...");
@@ -110,36 +120,65 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         {
             Console.Clear();
             Console.WriteLine("=== Add/Edit Patient Record ===");
+
             Console.Write("Enter Record ID (0 to create new): ");
-            int recordId = int.Parse(Console.ReadLine());
+            string? recordIdInput = Console.ReadLine();
+            if (!int.TryParse(recordIdInput, out int recordId))
+            {
+                Console.WriteLine("Invalid Record ID.");
+                return;
+            }
 
             var input = new PatientRecordInputDTO();
+
             Console.Write("Patient ID: ");
-            input.PatientId = int.Parse(Console.ReadLine());
+            string? patientIdInput = Console.ReadLine();
+            if (!int.TryParse(patientIdInput, out int parsedPatientId))
+            {
+                Console.WriteLine("Invalid Patient ID.");
+                return;
+            }
+            input.PatientId = parsedPatientId;
+
             Console.Write("Patient Name: ");
-            input.PatientName = Console.ReadLine();
+            input.PatientName = Console.ReadLine() ?? "";
+
             Console.Write("Diagnosis: ");
-            input.Diagnosis = Console.ReadLine();
+            input.Diagnosis = Console.ReadLine() ?? "";
+
             Console.Write("Treatment: ");
-            input.Treatment = Console.ReadLine();
-            Console.Write("Visit Date (yyyy-mm-dd): ");
-            input.VisitDate = DateTime.Parse(Console.ReadLine());
+            input.Treatment = Console.ReadLine() ?? "";
+
+            Console.Write("Visit Date (yyyy-MM-dd): ");
+            string? visitDateInput = Console.ReadLine();
+            if (!DateTime.TryParse(visitDateInput, out DateTime parsedVisitDate))
+            {
+                Console.WriteLine("Invalid Visit Date.");
+                return;
+            }
+            input.VisitDate = parsedVisitDate;
+
+            Console.Write("Notes (optional): ");
+            input.Notes = Console.ReadLine() ?? "";
 
             if (recordId == 0)
+            {
                 _doctorService.AddOrUpdatePatientRecord(_doctorId, new Models.PatientRecord
                 {
                     PatientId = input.PatientId,
                     PatientName = input.PatientName,
                     Diagnosis = input.Diagnosis,
                     Treatment = input.Treatment,
-                    VisitDate = input.VisitDate
+                    VisitDate = input.VisitDate,
+                    Notes = input.Notes
                 });
+            }
             else
+            {
                 _recordService.UpdateRecord(recordId, input);
-
-            Console.WriteLine(" Record saved! Press any key...");
-            Console.ReadKey();
+            }
         }
+
         // Method to create a new appointment
         private void CreateAppointment()
         {
@@ -147,22 +186,63 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("=== Create Appointment ===");
 
             var input = new BookingInputDTO();
+
+            // Patient ID
             Console.Write("Patient ID: ");
-            int patientId = int.Parse(Console.ReadLine());
+            string? patientIdInput = Console.ReadLine();
+            if (!int.TryParse(patientIdInput, out int patientId))
+            {
+                Console.WriteLine("Invalid Patient ID.");
+                return;
+            }
+
+            // Clinic ID
             Console.Write("Clinic ID: ");
-            input.ClinicId = int.Parse(Console.ReadLine());
+            string? clinicInput = Console.ReadLine();
+            if (!int.TryParse(clinicInput, out int clinicId))
+            {
+                Console.WriteLine("Invalid Clinic ID.");
+                return;
+            }
+            input.ClinicId = clinicId;
+
+            // Department ID
             Console.Write("Department ID: ");
-            input.DepartmentId = int.Parse(Console.ReadLine());
+            string? deptInput = Console.ReadLine();
+            if (!int.TryParse(deptInput, out int deptId))
+            {
+                Console.WriteLine("Invalid Department ID.");
+                return;
+            }
+            input.DepartmentId = deptId;
+
+            // Doctor ID is injected
             input.DoctorId = _doctorId;
-            Console.Write("Appointment Date (yyyy-mm-dd): ");
-            input.AppointmentDate = DateTime.Parse(Console.ReadLine());
+
+            // Appointment Date
+            Console.Write("Appointment Date (yyyy-MM-dd): ");
+            string? dateInput = Console.ReadLine();
+            if (!DateTime.TryParse(dateInput, out DateTime appDate))
+            {
+                Console.WriteLine("Invalid date format.");
+                return;
+            }
+            input.AppointmentDate = appDate;
+
+            // Appointment Time
             Console.Write("Appointment Time (hh:mm): ");
-            input.AppointmentTime = TimeSpan.Parse(Console.ReadLine());
+            string? timeInput = Console.ReadLine();
+            if (!TimeSpan.TryParse(timeInput, out TimeSpan appTime))
+            {
+                Console.WriteLine("Invalid time format.");
+                return;
+            }
+            input.AppointmentTime = appTime;
 
             _bookingService.BookAppointment(input, patientId);
-
             Console.WriteLine("Appointment created! Press any key...");
             Console.ReadKey();
         }
+
     }
 }

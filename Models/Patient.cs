@@ -9,7 +9,7 @@ namespace Codeline_HealthCareCenter_OOP.Models
     public class Patient : User
     {
         private int _phoneNumber;
-        private string _gender;
+        private string _gender = string.Empty;
         private int _age;
         private int _nationalId;
         private static int _patientCounter = 1;

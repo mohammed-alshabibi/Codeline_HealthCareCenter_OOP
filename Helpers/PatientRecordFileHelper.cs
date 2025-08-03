@@ -14,7 +14,7 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
         public static void Save(List<PatientRecord> records)
         {
             var lines = records.Select(r =>
-                $"{r.RecordId}|{r.PatientId}|{r.PatientName}|{r.Diagnosis}|{r.Treatment}|{r.VisitDate}");
+                $"{r.RecordId}|{r.PatientId}|{r.PatientName}|{r.Diagnosis}|{r.Treatment}|{r.VisitDate}|{r.Notes}");
             File.WriteAllLines(FilePath, lines);
         }
 
@@ -35,7 +35,8 @@ namespace Codeline_HealthCareCenter_OOP.Helpers
                         PatientName = parts[2],
                         Diagnosis = parts[3],
                         Treatment = parts[4],
-                        VisitDate = DateTime.Parse(parts[5])
+                        VisitDate = DateTime.Parse(parts[5]),
+                        Notes = parts.Length > 6 ? parts[6] : string.Empty, // Handle optional notes
                     };
                 }).ToList();
         }

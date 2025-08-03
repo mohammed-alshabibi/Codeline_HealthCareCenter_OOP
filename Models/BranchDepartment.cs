@@ -13,10 +13,6 @@ namespace Codeline_HealthCareCenter_OOP.Models
         // Foreign Keys
         public int BranchId { get; set; }
         public int DepartmentId { get; set; }
-
-        // Navigation Properties
-        public Branch Branch { get; set; }
-        public Department Department { get; set; }
     }
 
 }

@@ -28,7 +28,8 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 PatientName = input.PatientName,
                 Diagnosis = input.Diagnosis,
                 Treatment = input.Treatment,
-                VisitDate = input.VisitDate
+                VisitDate = input.VisitDate,
+                Notes = input.Notes
             };
             records.Add(record);
             PatientRecordFileHelper.Save(records);
@@ -63,7 +64,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             return false;
         }
         // Method to get a patient record by its ID
-        public PatientRecord GetRecordById(int recordId)
+        public PatientRecord? GetRecordById(int recordId)
         {
             return records.FirstOrDefault(r => r.RecordId == recordId);
         }

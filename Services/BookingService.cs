@@ -62,30 +62,35 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
         public IEnumerable<BookingInputDTO> GetAvailableAppointmentsBy(int? clinicId, int? departmentId)
         {
-            var usedTimes = bookings
+            var usedAppointments = bookings
                 .Where(b => b.ClinicId == clinicId && b.DepartmentId == departmentId)
-                .Select(b => b.AppointmentTime)
-                .ToHashSet();
-
+                .ToList();
             List<BookingInputDTO> available = new List<BookingInputDTO>();
-
-            for (int i = 9; i <= 16; i++)
+            // Check appointments for the next 7 days
+            for (int dayOffset = 0; dayOffset < 7; dayOffset++)
             {
-                var time = TimeSpan.FromHours(i);
-                if (!usedTimes.Contains(time))
+                DateTime date = DateTime.Today.AddDays(dayOffset);
+                for (int hour = 9; hour <= 16; hour++)
                 {
-                    available.Add(new BookingInputDTO
+                    TimeSpan time = TimeSpan.FromHours(hour);
+                    bool isUsed = usedAppointments.Any(b =>
+                        b.AppointmentDate.Date == date &&
+                        b.AppointmentTime == time);
+                    if (!isUsed)
                     {
-                        ClinicId = clinicId,
-                        DepartmentId = departmentId,
-                        AppointmentDate = DateTime.Today,
-                        AppointmentTime = time
-                    });
+                        available.Add(new BookingInputDTO
+                        {
+                            ClinicId = clinicId,
+                            DepartmentId = departmentId,
+                            AppointmentDate = date,
+                            AppointmentTime = time
+                        });
+                    }
                 }
             }
-
             return available;
         }
+
 
 
         /// Retrieves booked appointments for a specific patient
@@ -96,7 +101,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 .Select(MapToOutputDTO);
         }
         // /// Retrieves a booking by its ID
-        public Booking GetBookingById(int bookingId)
+        public Booking? GetBookingById(int bookingId)
         {
             return bookings.FirstOrDefault(b => b.BookingId == bookingId);
         }

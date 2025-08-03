@@ -66,12 +66,12 @@ namespace Codeline_HealthCareCenter_OOP.Implementations
             }
         }
         // Method to get a department by name
-        public Department GetDepartmentByName(string department)
+        public Department? GetDepartmentByName(string department)
         {
             return _departments.FirstOrDefault(d => d.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase));
         }
         // Method to get a department by ID and return as DTO
-        public DepartmentDTO GetDepartmentByid(int did)
+        public DepartmentDTO? GetDepartmentByid(int did)
         {
             var dept = _departments.FirstOrDefault(d => d.DepartmentId == did);
             return dept == null ? null : new DepartmentDTO { DepartmentName = dept.DepartmentName };
