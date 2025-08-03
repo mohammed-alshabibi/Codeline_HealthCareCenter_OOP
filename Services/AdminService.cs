@@ -12,17 +12,20 @@ namespace Codeline_HealthCareCenter_OOP.Services
 {
     public class AdminService
     {
-        private List<Admin> _admins;
+        private List<Admin> _admins; // List to store admin data
 
         public AdminService()
         {
-            _admins = AdminDataHelper.Load();
+            _admins = AdminDataHelper.Load(); // Load existing admins from file
         }
+
+        // Authenticates an admin user based on email and password.
         public UserOutputDTO? LoginUserOutputDTO(string email, string password)
         {
+            
             var admin = _admins.FirstOrDefault(a =>
                 a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                a.Password == password);
+                a.Password == password); // Check if admin exists with matching email and password
 
             if (admin == null) return null;
 
@@ -33,73 +36,58 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Role = admin.Role
             };
         }
-        public void AddAdmin(UserInputDTO input)
+        // Method to add a new admin
+        public void AddAdmin(UserInputDTO input) 
         {
             string phoneNumber = "00000000"; // You can also collect this from UI
             string adminId = "ADM" + (_admins.Count + 1).ToString("D3");
 
-            Admin newAdmin = new Admin(input.FullName, input.Email, input.Password, phoneNumber, adminId);
+            Admin newAdmin = new Admin(input.FullName, input.Email, input.Password, phoneNumber, adminId); // Create a new Admin object
             _admins.Add(newAdmin);
             AdminDataHelper.Save(_admins);
 
             Console.WriteLine(" Admin created and saved.");
         }
-
+        // Method to display all registered admins
         public void ShowAllAdmins() 
         {
-            Console.WriteLine("\n Registered Admins:");
-            foreach (var admin in _admins)
+            Console.Clear();
+
+            // Header
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╔════════════════════════════════════════════════════╗");
+            Console.WriteLine("║              Registered Admins List                ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            if (_admins.Count == 0)
             {
-                Console.WriteLine($" {admin.FullName} | Email: {admin.Email} | ID: {admin.AdminID}");
-            }
-        }
-
-        public List<Admin> GetAllAdmins()
-        {
-            return _admins;
-        }
-
-        public Admin? Login(string email, string password)
-        {
-            return _admins.FirstOrDefault(a =>
-                a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                a.Password == password);
-        }
-
-        static async Task AdminLogin(IUserService userService, IPatientService patientService, IAuthService authService)
-
-        {
-            Console.WriteLine("=== Admin Login ===");
-
-            string email = Ask("Email");
-            string password = Ask("Password");
-
-            var loginDto = new UserInputDTO
-            {
-                Email = email,
-                Password = password
-            };
-
-            var admin = userService.AuthenticateUser(loginDto);
-
-
-            if (admin != null && admin.Role == "Admin")
-            {
-                Console.WriteLine($" Welcome, {admin.FullName}");
-                SuperAdminMenu.Show();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  No admins found.");
+                Console.ResetColor();
             }
             else
             {
-                Console.WriteLine("Invalid Admin credentials.");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n Total Admins: {_admins.Count}");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine($"{" Name",-25} | {" Email",-25} |  ID");
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.ResetColor();
+
+                foreach (var admin in _admins)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"{admin.FullName,-25} | {admin.Email,-25} | {admin.AdminID}");
+                }
+
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
-            await authService.SaveTokenToCookie(admin.UserID.ToString());
-            SuperAdminMenu.Show();
 
         }
-        static string Ask(string label)
-        {
-            Console.Write($"{label}: ");
-            return Console.ReadLine();
-        }
+
     }
 }

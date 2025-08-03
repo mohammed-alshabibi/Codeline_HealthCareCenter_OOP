@@ -12,6 +12,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 {
     public static class SuperAdminMenu
     {
+        // Method to display the Super Admin menu and handle user input
         public static void Show()
         {
             AdminService adminService = new AdminService();
@@ -139,12 +140,13 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 }
             }
         }
-
+        // Method to pause the console and wait for user input
         static void Pause()
         {
             Console.WriteLine("\nPress any key to return...");
             Console.ReadKey();
         }
+        // Methods to ask for user input with validation
         private static string AskPhone(string label)
         {
             string input;
@@ -163,7 +165,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
             return input;
         }
-
+        // Method to ask for user input with validation
         private static string Ask(string label, bool required = true)
         {
             string input;
@@ -181,7 +183,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
             return input;
         }
-
+        // Method to ask for an integer input with validation
         private static int AskInt(string label)
         {
             int value;
@@ -196,7 +198,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.ResetColor();
             }
         }
-
+        // Method to ask for a double input with validation
         private static double AskDouble(string label)
         {
             double value;
@@ -211,6 +213,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 Console.ResetColor();
             }
         }
+        // Method to ask for a name input with validation
         private static string AskName(string label)
         {
             string input;
@@ -229,7 +232,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
             return input;
         }
-
+        // Method to ask for an email input with validation
         private static string AskEmail(string label)
         {
             string input;
@@ -248,7 +251,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
             return input;
         }
-
+        // Method to read masked input (like passwords) from the console
         private static string ReadMaskedInput(string label)
         {
             Console.Write(label);
@@ -274,7 +277,5 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine(); // New line after Enter
             return password;
         }
-
-
     }
 }

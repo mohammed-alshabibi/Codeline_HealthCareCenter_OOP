@@ -24,6 +24,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             _authService = authService;
         }
 
+        // Method to run the Doctor Menu
         public void Run()
         {
             while (true)
@@ -66,7 +67,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 }
             }
         }
-
+        // Method to assign the doctor to a clinic and department
         private void AssignToClinic()
         {
             Console.Write("Enter Clinic ID: ");
@@ -78,7 +79,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine(" Assigned successfully! Press any key...");
             Console.ReadKey();
         }
-
+        // Method to view all patient records for the doctor
         private void ViewRecords()
         {
             Console.Clear();
@@ -104,7 +105,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine("\nPress any key to go back...");
             Console.ReadKey();
         }
-        
+        // Method to add or edit a patient record
         private void AddOrEditRecord()
         {
             Console.Clear();
@@ -139,7 +140,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.WriteLine(" Record saved! Press any key...");
             Console.ReadKey();
         }
-
+        // Method to create a new appointment
         private void CreateAppointment()
         {
             Console.Clear();

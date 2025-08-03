@@ -5,44 +5,31 @@ using Codeline_HealthCareCenter_OOP.Services;
 public class UserService : IUserService
 {
       private List<User> users = new();
-
-    // ✅ Constructor with default Super Admin
-   // public UserService()
-    //{
-    //    users.Add(new User("CLHC", "CLHC@", "1234", "superadmin"));
-    //}
-
-   
-
+    // Method to add a new super admin
     public void AddSuperAdmin(UserInputDTO input)
     {
         var superAdmin = new User(input.FullName, input.Email, input.Password, input.Role);
         users.Add(superAdmin);
     }
-
+    // Method to add a new staff member
     public int AddStaff(User user)
     {
         users.Add(user);
         return user.UserID;
     }
-
+    // Method to add a new user
     public void AddUser(User user)
     {
         users.Add(user);
     }
-
-    public User AuthenticateUser(string email, string password)
-    {
-        return users.FirstOrDefault(u => u.Email == email && u.Password == password);
-    }
-
+    // Method to deactivate a user by their unique ID
     public void DeactivateUser(int uid)
     {
         var user = users.FirstOrDefault(u => u.UserID == uid);
         if (user != null)
             user.IsActive = false;
     }
-
+    // Method to authenticate a user using email and password
     public UserOutputDTO AuthenticateUser(UserInputDTO dto)
     {
         var user = users.FirstOrDefault(u =>
@@ -58,26 +45,26 @@ public class UserService : IUserService
             UserID = user.UserID
         };
     }
-
+    // Method to check if an email already exists in the user list
     public bool EmailExists(string email) =>
         users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-
+    // Method to get all users
     public User GetUserById(int uid) =>
         users.FirstOrDefault(u => u.UserID == uid);
-
+    // Method to get a user by their name
     public User GetUserByName(string userName) =>
         users.FirstOrDefault(u => u.FullName.Equals(userName, StringComparison.OrdinalIgnoreCase));
-
+    // Method to get a user's name by their unique ID
     public string GetUserName(int userId) =>
         users.FirstOrDefault(u => u.UserID == userId)?.FullName;
-
+    // Method to update a user's password
     public void UpdatePassword(int uid, string currentPassword, string newPassword)
     {
         var user = users.FirstOrDefault(u => u.UserID == uid && u.Password == currentPassword);
         if (user != null)
             user.Password = newPassword;
     }
-
+    // Method to update a user's details
     public void UpdateUser(User user)
     {
         var existing = users.FirstOrDefault(u => u.UserID == user.UserID);
@@ -87,7 +74,7 @@ public class UserService : IUserService
             existing.Email = user.Email;
         }
     }
-
+    // Method to get user data by name or unique ID
     public UserOutputDTO GetUserData(string? userName, int? uid)
     {
         var user = uid.HasValue
@@ -98,7 +85,7 @@ public class UserService : IUserService
             ? new UserOutputDTO { FullName = user.FullName, Email = user.Email, Role = user.Role }
             : null;
     }
-
+    // Method to get users by their role name
     public IEnumerable<UserOutputDTO> GetUserByRole(string roleName)
     {
         return users
@@ -109,24 +96,5 @@ public class UserService : IUserService
                 Email = u.Email,
                 Role = u.Role
             });
-    }
-
-    public void AddAdmin(UserInputDTO dto)
-    {
-        Admin newAdmin = new Admin(
-            dto.FullName,
-            dto.Email,
-            dto.Password,
-            dto.PhoneNumber,
-            GenerateAdminId()
-        );
-
-        users.Add(newAdmin);
-        Console.WriteLine(" Admin created and saved successfully.");
-    }
-
-    private string GenerateAdminId()
-    {
-        return "ADM" + DateTime.Now.Ticks.ToString().Substring(10);
     }
 }

@@ -13,16 +13,17 @@ namespace Codeline_HealthCareCenter_OOP.Services
     {
         private readonly List<Doctor> _doctors = new();
 
+        // Load the doctors from the file when the service is initialized
         public DoctorService()
         {
             _doctors = DoctorDataHelper.Load();
         }
-
+        // Method to save the current list of doctors to the file
         public void SaveToFile()
         {
             DoctorDataHelper.Save(_doctors);
         }
-
+        // Method to add a new doctor based on the input DTO
         public void AddDoctor(DoctorInput input)
         {
             var doctor = new Doctor
@@ -43,7 +44,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             DoctorDataHelper.Save(_doctors);
             Console.WriteLine(" Doctor added Successfully.");
         }
-
+        // Method to get all doctors
         public IEnumerable<Doctor> GetAllDoctors()
         {
             return _doctors;
@@ -79,18 +80,18 @@ namespace Codeline_HealthCareCenter_OOP.Services
             }
         }
 
-        // You can implement the rest later as needed
+        // Method to get a doctor by ID
         public Doctor GetDoctorById(int id) =>
     _doctors.FirstOrDefault(d => int.TryParse(d.doctorID, out int parsedId) && parsedId == id);
 
-
+        // Method to get a doctor by email
         public Doctor GetDoctorByEmail(string email) =>
             _doctors.FirstOrDefault(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-
+        // Method to get a doctor by name
         public Doctor GetDoctorByName(string docName) =>
             _doctors.FirstOrDefault(d => d.FullName.Equals(docName, StringComparison.OrdinalIgnoreCase));
-
-        public void UpdateDoctor(Doctor doctor)
+        // updates an existing doctor's details
+        public void UpdateDoctor(Doctor doctor) 
         {
             var existing = _doctors.FirstOrDefault(d => d.doctorID == doctor.doctorID);
             if (existing != null)
@@ -102,12 +103,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 existing.Availability = doctor.Availability;
             }
         }
-
+        // Method to get a doctor by branch and department
         public IEnumerable<Doctor> GetDoctorByBrancDep(int bid, int depid)
         {
             return Enumerable.Empty<Doctor>(); // implement later if needed
         }
-
+        // Method to get a doctor's data by name or ID
         public DoctorOutPutDTO GetDoctorData(string? docName, int? Did)
         {
             var doctor = Did != null
@@ -125,7 +126,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Salary = doctor.Salary
             };
         }
-
+        // Method to update a doctor's details based on input DTO
         public void UpdateDoctorDetails(DoctorUpdateDTO input)
         {
             var doc = GetDoctorById(input.DoctorId);
@@ -135,7 +136,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 doc.Salary = input.Salary;
             }
         }
-
+        // Method to get doctor details by ID
         public DoctorOutPutDTO GetDoctorDetailsById(int uid)
         {
             var doc = GetDoctorById(uid);
@@ -150,26 +151,24 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Salary = doc.Salary
             };
         }
-
-
+        // Method to get doctors by branch name or department name
         public IEnumerable<DoctorOutPutDTO> GetDoctorsByBranchName(string branchName)
         {
             return Enumerable.Empty<DoctorOutPutDTO>(); 
         }
-
+        // Method to get doctors by department name
         public IEnumerable<DoctorOutPutDTO> GetDoctorsByDepartmentName(string departmentName)
         {
             return Enumerable.Empty<DoctorOutPutDTO>(); 
         }
-
+        // Method to check if an email already exists in the doctor list
         public bool EmailExists(string email)
         {
             return _doctors.Any(d => d.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
-
-
-        private List<PatientRecord> _patientRecords = new(); // Add this field if needed
-
+        // This field is used to store patient records associated with doctors
+        private List<PatientRecord> _patientRecords = new();
+        // Method to assign a doctor to a clinic and department
         public void AssignToClinic(int doctorId, int clinicId, int departmentId)
         {
             var doc = GetDoctorById(doctorId);
@@ -180,12 +179,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 SaveToFile(); // Save the updated doctor lisT
             }
         }
-
+        // Method to get all patient records for a specific doctor
         public IEnumerable<PatientRecord> GetDoctorPatientRecords(int doctorId)
         {
             return _patientRecords.Where(p => p.DoctorId == doctorId);
         }
-
+        // Method to add or update a patient record for a doctor
         public void AddOrUpdatePatientRecord(int doctorId, PatientRecord record)
         {
             var existing = _patientRecords.FirstOrDefault(p => p.RecordId == record.RecordId);

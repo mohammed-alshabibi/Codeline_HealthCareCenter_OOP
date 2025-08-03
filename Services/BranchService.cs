@@ -8,7 +8,7 @@ using Codeline_HealthCareCenter_OOP.Services;
 
 namespace Codeline_HealthCareCenter_OOP.Services
 {
-    public class BranchService : IBranchService
+    public class BranchService : IBranchService // Interface implementation
     {
         private List<Branch> _branches;
 
@@ -16,11 +16,11 @@ namespace Codeline_HealthCareCenter_OOP.Services
         {
             _branches = BranchFileHelper.LoadBranches();
         }
-
+        // Method to add a new branch
         public void AddBranch(BranchDTO branchDto)
         {
 
-            int newId = _branches.Count > 0 ? _branches.Max(b => b.BranchId) + 1 : 1;
+            int newId = _branches.Count > 0 ? _branches.Max(b => b.BranchId) + 1 : 1; // Generate new ID based on existing branches
 
             Branch newBranch = new Branch
             {
@@ -34,21 +34,24 @@ namespace Codeline_HealthCareCenter_OOP.Services
             BranchFileHelper.SaveBranches(_branches);
             Console.WriteLine("Branch created successfully.");
         }
+        // Method to get all branches
         public IEnumerable<Branch> GetAllBranches()
         {
             return _branches;
         }
 
+        // Method to get a branch by ID
         public BranchDTO GetBranchById(int id)
         {
-            var branch = _branches.FirstOrDefault(b => b.BranchId == id);
-            return branch == null ? null : new BranchDTO
+            var branch = _branches.FirstOrDefault(b => b.BranchId == id); // Find branch by ID
+            return branch == null ? null : new BranchDTO // Return DTO if found
             {
                 BranchName = branch.BranchName,
                 Location = branch.Location
             };
         }
 
+        // Method to get branch details by name or ID
         public BranchDTO GetBranchDetails(string? branchName, int? branchId)
         {
             var branch = _branches.FirstOrDefault(b =>
@@ -61,17 +64,17 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Location = branch.Location
             };
         }
-
+        // Method to get branch details by branch name
         public Branch GetBranchDetailsByBranchName(string branchName)
         {
             return _branches.FirstOrDefault(b => b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase));
         }
-
+        // Method to get branch name by ID
         public string GetBranchName(int branchId)
         {
             return _branches.FirstOrDefault(b => b.BranchId == branchId)?.BranchName ?? "Not found";
         }
-
+        // Method to set branch status (active/inactive)
         public void SetBranchStatus(int branchId, bool isActive)
         {
             var branch = _branches.FirstOrDefault(b => b.BranchId == branchId);
@@ -81,6 +84,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 BranchFileHelper.SaveBranches(_branches);
             }
         }
+        // Method to display all branches
         public void ShowAllBranches()
         {
             Console.WriteLine("\n Branch List:");
@@ -89,7 +93,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 Console.WriteLine($"- ID: {branch.BranchId}, Name: {branch.BranchName}, Location: {branch.Location}, Active: {branch.IsActive}");
             }
         }
-
+        // Method to update an existing branch
         public void UpdateBranch(int branchId, BranchDTO branchDto)
         {
             var branch = _branches.FirstOrDefault(b => b.BranchId == branchId);

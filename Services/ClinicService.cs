@@ -7,11 +7,11 @@ using Codeline_HealthCareCenter_OOP.Helpers;
 namespace Codeline_HealthCareCenter_OOP.Services
 {
     /// Interface for Clinic Service
-    public class ClinicService : IClinicService
+    public class ClinicService : IClinicService // Implements the IClinicService interface
     {
         private List<Clinic> clinics = new List<Clinic>();
         private int clinicCounter = 1;
-
+        // Load File to initialize the ClinicService
         public ClinicService()
         {
             clinics = ClinicFileHelper.Load();
@@ -20,7 +20,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 clinicCounter = clinics.Max(c => c.ClinicId) + 1; // Start from the next ID
             }
         }
-
+        //  Adds a new clinic based on the input DTO
         public void AddClinic(ClinicInputDTO input)
         {
             var clinic = new Clinic
@@ -34,7 +34,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             ClinicFileHelper.Save(clinics);
             Console.WriteLine("Clinc Added...");
         }
-        /// Updates an existing clinic based on the clinicId
+        // Updates an existing clinic based on the clinicId
         public void UpdateClinic(int clinicId, ClinicInputDTO input)
         {
             var clinic = clinics.FirstOrDefault(c => c.ClinicId == clinicId);
@@ -45,7 +45,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
                 clinic.Location = input.Location;
             }
         }
-        /// Deletes a clinic based on the clinicId
+        // Deletes a clinic based on the clinicId
         public bool DeleteClinic(int clinicId)
         {
             var clinic = clinics.FirstOrDefault(c => c.ClinicId == clinicId);
@@ -59,13 +59,12 @@ namespace Codeline_HealthCareCenter_OOP.Services
 
 
         }
-        // / Retrieves a clinic by its ID
+        //  Retrieves a clinic by its ID
         public Clinic GetClinicById(int clinicId)
         {
             return clinics.FirstOrDefault(c => c.ClinicId == clinicId);
         }
-
-        /// Retrieves all clinics and maps them to ClinicOutputDTO
+        // Retrieves all clinics and maps them to ClinicOutputDTO
         public IEnumerable<ClinicOutputDTO> GetAllClinics()
         {
             return clinics.Select(c => new ClinicOutputDTO

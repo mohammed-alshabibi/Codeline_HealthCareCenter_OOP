@@ -21,7 +21,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             _recordService = recordService;
             _authService = authService;
         }
-
+        // Method to display the main menu for patients
         public void Show(PatienoutputDTO patient)
         {
             while (true)
@@ -86,7 +86,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 }
             }
         }
-
+        // Method to display the patient menu after successful login
         private void ShowPatientMenu(PatienoutputDTO patient)
         {
 
@@ -176,7 +176,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                 }
             }
         }
-
+        // Method to handle patient self-signup
         public void PatientSelfSignup()
         {
             Console.Clear();
@@ -201,124 +201,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             _patientService.AddPatient(input);
             Console.WriteLine(" Signup successful.");
         }
-
-        private static string Ask(string label, bool required = true)
-        {
-            string input;
-            do
-            {
-                Console.Write($"{label} ");
-                input = Console.ReadLine();
-                if (required && string.IsNullOrWhiteSpace(input))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This field is required. Please try again.");
-                    Console.ResetColor();
-                }
-            } while (required && string.IsNullOrWhiteSpace(input));
-
-            return input;
-        }
-
-        private static int AskInt(string label)
-        {
-            int value;
-            while (true)
-            {
-                Console.Write($"{label} ");
-                if (int.TryParse(Console.ReadLine(), out value))
-                    return value;
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid number. Please enter a valid integer.");
-                Console.ResetColor();
-            }
-        }
-
-        private static double AskDouble(string label)
-        {
-            double value;
-            while (true)
-            {
-                Console.Write($"{label} ");
-                if (double.TryParse(Console.ReadLine(), out value))
-                    return value;
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid number. Please enter a valid decimal.");
-                Console.ResetColor();
-            }
-        }
-        private static string AskName(string label)
-        {
-            string input;
-            do
-            {
-                Console.Write(label);
-                input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Please enter a valid name (letters and spaces only).");
-                    Console.ResetColor();
-                    input = null;
-                }
-            } while (input == null);
-
-            return input;
-        }
-
-        private static string AskEmail(string label)
-        {
-            string input;
-            do
-            {
-                Console.Write(label);
-                input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
-                    Console.ResetColor();
-                    input = null;
-                }
-            } while (input == null);
-
-            return input;
-        }
-
-        private static string ReadMaskedInput(string label)
-        {
-            Console.Write(label);
-            string password = "";
-            ConsoleKey key;
-            do
-            {
-                var keyInfo = Console.ReadKey(intercept: true);
-                key = keyInfo.Key;
-
-                if (key == ConsoleKey.Backspace && password.Length > 0)
-                {
-                    password = password[..^1];
-                    Console.Write("\b \b");
-                }
-                else if (!char.IsControl(keyInfo.KeyChar))
-                {
-                    password += keyInfo.KeyChar;
-                    Console.Write("*");
-                }
-            } while (key != ConsoleKey.Enter);
-
-            Console.WriteLine(); // New line after Enter
-            return password;
-        }
-
-        private void Pause()
-        {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
+        // Method to view available bookings based on clinic and department
         private void ViewAvailableBookings()
         {
             Console.Clear();
@@ -359,6 +242,111 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             Console.ResetColor();
             this.Pause();
         }
+        // Method to ask for input with validation
+        private static string Ask(string label, bool required = true)
+        {
+            string input;
+            do
+            {
+                Console.Write($"{label} ");
+                input = Console.ReadLine();
+                if (required && string.IsNullOrWhiteSpace(input))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This field is required. Please try again.");
+                    Console.ResetColor();
+                }
+            } while (required && string.IsNullOrWhiteSpace(input));
+
+            return input;
+        }
+        // Method to ask for an integer input with validation
+        private static int AskInt(string label)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write($"{label} ");
+                if (int.TryParse(Console.ReadLine(), out value))
+                    return value;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid number. Please enter a valid integer.");
+                Console.ResetColor();
+            }
+        }
+        // Method to ask for a name input with validation
+        private static string AskName(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Please enter a valid name (letters and spaces only).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+        // Method to ask for an email input with validation
+        private static string AskEmail(string label)
+        {
+            string input;
+            do
+            {
+                Console.Write(label);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
+                    Console.ResetColor();
+                    input = null;
+                }
+            } while (input == null);
+
+            return input;
+        }
+        // Method to read masked input (like password)
+        private static string ReadMaskedInput(string label)
+        {
+            Console.Write(label);
+            string password = "";
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    password += keyInfo.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key != ConsoleKey.Enter);
+
+            Console.WriteLine(); // New line after Enter
+            return password;
+        }
+        // Method to pause the console and wait for user input
+        private void Pause()
+        {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+
     }
 }
 
