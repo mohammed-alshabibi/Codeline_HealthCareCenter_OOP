@@ -21,6 +21,7 @@ namespace Codeline_HealthCareCenter_OOP
             IBranchDepartmentService branchDepartmentService = new BranchDepartmentService();
             IPatientService patientService = new PatientService(bookingService, patientRecordService, authService);
             IDoctorService doctorService = new DoctorService();
+            IDepartmentService departmentService = new DepartmentService();
 
 
             while (true)
@@ -127,8 +128,9 @@ namespace Codeline_HealthCareCenter_OOP
                                 patientService,
                                 bookingService,
                                 patientRecordService,
-                                authService
-
+                                authService,
+                                clinicService,
+                                departmentService
                             );
                             patientMenu.Show(null); 
                             break;
@@ -151,7 +153,7 @@ namespace Codeline_HealthCareCenter_OOP
                     var choice = Console.ReadLine();
                     if (choice?.ToLower() == "y")
                     {
-                        var patientMenu = new PatientMenu(patientService, bookingService, patientRecordService, authService);
+                        var patientMenu = new PatientMenu(patientService, bookingService, patientRecordService, authService, clinicService, departmentService);
                         patientMenu.Show(null);
                         // triggers signup flow
                     }

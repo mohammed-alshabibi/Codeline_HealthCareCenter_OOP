@@ -60,7 +60,7 @@ namespace Codeline_HealthCareCenter_OOP.Services
             return bookings.Select(MapToOutputDTO);
         }
 
-        public IEnumerable<BookingInputDTO> GetAvailableAppointmentsBy(int? clinicId, int? departmentId)
+        public IEnumerable<BookingInputDTO>   GetAvailableAppointmentsBy(int? clinicId, int? departmentId)
         {
             var usedAppointments = bookings
                 .Where(b => b.ClinicId == clinicId && b.DepartmentId == departmentId)

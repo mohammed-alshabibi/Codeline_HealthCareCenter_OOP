@@ -13,13 +13,19 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         private readonly IBookingService _bookingService;
         private readonly IPatientRecordService _recordService;
         private readonly IAuthService _authService;
+        private readonly IClinicService _clinicService;
+        private readonly IDepartmentService _departmentService;
 
-        public PatientMenu(IPatientService patientService, IBookingService bookingService, IPatientRecordService recordService, IAuthService authService)
+
+        public PatientMenu(IPatientService patientService, IBookingService bookingService, IPatientRecordService recordService, IAuthService authService,IClinicService clinicService, IDepartmentService departmentService)
         {
             _patientService = patientService;
             _bookingService = bookingService;
             _recordService = recordService;
             _authService = authService;
+            _clinicService = clinicService;
+            _departmentService = departmentService;
+
         }
         // Method to display the main menu for patients
         public void Show(PatienoutputDTO patient)
@@ -52,8 +58,8 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     case "2":
                         var dto = new PatientInputDTO
                         {
-                            Email = AskEmail("Email"),
-                            Password = ReadMaskedInput("Password")
+                            Email = AskEmail("Email: "),
+                            Password = ReadMaskedInput("Password:")
                         };
 
                         var loggedIn = _patientService.AuthenticatePatient(dto);
@@ -121,12 +127,23 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         Console.Clear();
                         this.ViewAvailableBookings();
                         Console.WriteLine(" Book Appointment");
-
                         Console.Write("Clinic ID: ");
                         string? clinicInput = Console.ReadLine();
                         if (!int.TryParse(clinicInput, out int clinicId))
                         {
-                            Console.WriteLine("Invalid Clinic ID.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(" Invalid Clinic ID.");
+                            Console.ResetColor();
+                            this.Pause();
+                            break;
+                        }
+
+                        var clinic = _clinicService.GetClinicById(clinicId);
+                        if (clinic == null)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(" Clinic with ID {0} does not exist.", clinicId);
+                            Console.ResetColor();
                             this.Pause();
                             break;
                         }
@@ -135,10 +152,27 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                         string? departmentInput = Console.ReadLine();
                         if (!int.TryParse(departmentInput, out int departmentId))
                         {
-                            Console.WriteLine("Invalid Department ID.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(" Invalid Department ID.");
+                            Console.ResetColor();
                             this.Pause();
                             break;
                         }
+
+                        var department = _departmentService.GetDepartmentByid(departmentId);
+                        if (department == null)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(" Department with ID {0} does not exist.", departmentId);
+                            Console.ResetColor();
+                            this.Pause();
+                            break;
+                        }
+
+                        // Passed all validations
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($" Valid Clinic: {clinic.ClinicName} | Valid Department: {department.DepartmentName}");
+                        Console.ResetColor();
 
                         Console.Write("Doctor ID (optional, press Enter to skip): ");
                         string? doctorInput = Console.ReadLine();
@@ -228,29 +262,49 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         private void ViewAvailableBookings()
         {
             Console.Clear();
-            Console.WriteLine("=== View Available Bookings ===");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("=== VIEW AVAILABLE BOOKINGS ===");
+            Console.ResetColor();
 
+            // Step 1: Validate Clinic ID
             Console.Write("Enter Clinic ID: ");
             string? clinicInput = Console.ReadLine();
             if (!int.TryParse(clinicInput, out int clinicId))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid Clinic ID.");
+                Console.WriteLine(" Invalid Clinic ID.");
                 Console.ResetColor();
                 return;
             }
 
+            var existingClinic = _clinicService.GetClinicById(clinicId);
+            if (existingClinic == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" Clinic with the given ID does not exist.");
+                Console.ResetColor();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($" Clinic found: {existingClinic.ClinicName}");
+            Console.ResetColor();
+
+            // Step 2: Validate Department ID
             Console.Write("Enter Department ID: ");
             string? deptInput = Console.ReadLine();
             if (!int.TryParse(deptInput, out int departmentId))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid Department ID.");
+                Console.WriteLine(" Invalid Department ID.");
                 Console.ResetColor();
                 return;
             }
+
+            // Step 3: Fetch available slots
             var availableSlots = _bookingService.GetAvailableAppointmentsBy(clinicId, departmentId);
 
+            // Step 4: Display result
             if (!availableSlots.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -259,25 +313,26 @@ namespace Codeline_HealthCareCenter_OOP.Menus
             else
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("╔════════════════════════════════════════════════╗");
-                Console.WriteLine("║          AVAILABLE APPOINTMENT SLOTS           ║");
-                Console.WriteLine("╠════════════════════╦═══════════════════════════╣");
-                Console.WriteLine("║     Date           ║        Time               ║");
-                Console.WriteLine("╠════════════════════╬═══════════════════════════╣");
+                Console.WriteLine("\n╔════════════════════════════════════════════════╗");
+                Console.WriteLine("║        AVAILABLE APPOINTMENT SLOTS            ║");
+                Console.WriteLine("╠════════════════════╦══════════════════════════╣");
+                Console.WriteLine("║      Date          ║          Time            ║");
+                Console.WriteLine("╠════════════════════╬══════════════════════════╣");
                 Console.ResetColor();
 
                 foreach (var slot in availableSlots)
                 {
-                    Console.WriteLine($"║ {slot.AppointmentDate:yyyy-MM-dd,-18} ║ {slot.AppointmentTime,-25} ║");
+                    Console.WriteLine($"║ {slot.AppointmentDate:yyyy-MM-dd,-18} ║ {slot.AppointmentTime,-24} ║");
                 }
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("╚════════════════════╩═══════════════════════════╝");
+                Console.WriteLine("╚════════════════════╩══════════════════════════╝");
             }
 
             Console.ResetColor();
             this.Pause();
         }
+
         // Method to ask for input with validation
         private static string Ask(string label, bool required = true)
         {
@@ -344,6 +399,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
                     Console.WriteLine("Invalid email format. Try again (e.g., name@example.com).");
                     Console.ResetColor();
                     input = null;
+                    break;
                 }
             } while (input == null);
 
