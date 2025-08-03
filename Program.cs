@@ -36,11 +36,11 @@ namespace Codeline_HealthCareCenter_OOP
 
                 string[] words = { "Welcome", "to", "Codeline", "HealthCare", "System" };
                 ConsoleColor[] colors = {
+            ConsoleColor.White,
+            ConsoleColor.Blue,
             ConsoleColor.Cyan,
-            ConsoleColor.Green,
-            ConsoleColor.Yellow,
-            ConsoleColor.Magenta,
-            ConsoleColor.Blue
+            ConsoleColor.Red,
+            ConsoleColor.Gray
         };
 
                 for (int i = 0; i < words.Length; i++)
