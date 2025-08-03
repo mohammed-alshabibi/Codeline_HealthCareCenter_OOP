@@ -53,7 +53,7 @@ namespace Codeline_HealthCareCenter_OOP.Menus
 
                 Console.Write("\n Select an option: ");
 
-                string choice = Console.ReadLine();
+                string? choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -149,11 +149,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Methods to ask for user input with validation
         private static string AskPhone(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^\+?\d{7,15}$"))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -168,11 +168,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for user input with validation
         private static string Ask(string label, bool required = true)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write($"{label} ");
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (required && string.IsNullOrWhiteSpace(input))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -216,11 +216,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for a name input with validation
         private static string AskName(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(input) || !input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -235,11 +235,11 @@ namespace Codeline_HealthCareCenter_OOP.Menus
         // Method to ask for an email input with validation
         private static string AskEmail(string label)
         {
-            string input;
+            string? input;
             do
             {
                 Console.Write(label);
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
